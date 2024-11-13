@@ -16,28 +16,29 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { LoginSchema } from "@/types/loginSchema";
+import { RegisterSchema } from "@/types/registerSchema";
 import { useAction } from "next-safe-action/hooks";
-import {EmailSignIn} from "@/server/actions/emailSignin"
+import {EmailRegister} from "@/server/actions/emailRegister"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 
-export function LoginForm({ className, ...props }: UserAuthFormProps) {
+export function RegisterForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  const {execute, isExecuting, status, result} = useAction(EmailSignIn, {})
+  const {execute, isExecuting, status, result} = useAction(EmailRegister, {})
 
-  async function  onSubmit(values: z.infer<typeof LoginSchema>) {
+  async function  onSubmit(values: z.infer<typeof RegisterSchema>) {
     console.log(values);
     execute(values);
   }
 
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+  const form = useForm<z.infer<typeof RegisterSchema>>({
+    resolver: zodResolver(RegisterSchema),
     defaultValues: {
       email: "",
       password: "",
+      name: ""
     },
   });
 
@@ -57,6 +58,18 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
               </FormItem>
             )}
           />
+           <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input placeholder="Full Name" {...field}  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="password"
@@ -70,7 +83,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
             )}
           />
           <Button type="submit" className={cn('w-full', isExecuting ? 'animate-pulse' : '')}>
-            Sign in with Email
+            Register with Email
           </Button>
         </form>
       </Form>
