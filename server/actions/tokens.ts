@@ -58,3 +58,36 @@ export const sendVerificationEmail = async (email: string, token: string) => {
   if (error) console.log(error);
   if (data) return data;
 };
+
+
+export const verifyToken = async (token: string) => {
+    const existingToken = await prisma.verificationToken.findFirst({
+        where: {
+            token: token
+        }
+    })
+    if(!existingToken) return ({Failure: "Invalid token"})
+    if(existingToken.expires < new Date()) return {Failure: "Token expired"}
+
+    const existingUser = await prisma.user.findUnique({
+        where: {
+            email: existingToken.email
+        }
+    })
+    if(!existingUser) return {Failure: "Email not registered"}
+
+    await prisma.user.update({
+        data: {
+            emailVerified: new Date()
+        },
+        where : {
+            email: existingUser.email
+        }
+    })
+
+    await prisma.verificationToken.delete({
+        where: {
+            id: existingToken.id
+        }
+    })
+}

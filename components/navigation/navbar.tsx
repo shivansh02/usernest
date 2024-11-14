@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { auth } from "@/server/auth"
 import {signOut} from "next-auth/react"
+import UserAvatar from "./userAvatar"
 
 export default async function Navbar() {
   const links : string[] = ["Home", "Link1", "Link2", "Link3"]
@@ -89,10 +90,7 @@ export default async function Navbar() {
           Contact
         </Link> */}
         {user?.name}
-        <Button  variant="outline" size="sm">
-        {/* onClick={() => signOut()} */}
-          Sign Out
-        </Button>
+        <UserAvatar/>
       </nav>
     </header>
   )

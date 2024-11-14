@@ -2,7 +2,7 @@
 import { RegisterSchema } from "@/types/registerSchema";
 import { actionClient } from "@/lib/safe-action";
 import { prisma } from "@/server/prisma"
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import { generateVerificationToken, sendVerificationEmail } from "./tokens";
 
 export const EmailRegister = actionClient

@@ -31,6 +31,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
   async function  onSubmit(values: z.infer<typeof LoginSchema>) {
     console.log(values);
     execute(values);
+
   }
 
   const form = useForm<z.infer<typeof LoginSchema>>({
