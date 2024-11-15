@@ -15,17 +15,18 @@ generator client {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String       @id @default(cuid())
   name          String?
-  email         String    @unique
+  email         String       @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
-  role          Role      @default(USER)
   password      String
+  memberships   Membership[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Organisation Organisation[]
 }
 
 model Account {
@@ -53,6 +54,33 @@ model VerificationToken {
   token   String
   expires DateTime
   email   String
+}
+
+model Organisation {
+  id        String       @id @default(cuid())
+  name      String
+  desc      String
+  creatorId String
+  creator   User         @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  members   Membership[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Membership {
+  id             String @id @default(cuid())
+  userId         String
+  organisationId String
+  role           Role
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organisation Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, organisationId])
 }
 
 enum Role {
