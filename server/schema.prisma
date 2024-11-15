@@ -57,15 +57,15 @@ model VerificationToken {
 }
 
 model Organisation {
-  id        String       @id @default(cuid())
-  name      String
-  desc      String
-  creatorId String
-  creator   User         @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  members   Membership[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String       @id @default(cuid())
+  name       String
+  desc       String
+  creatorId  String
+  creator    User         @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  members    Membership[]
+  inviteCode String?       @unique
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
 }
 
 model Membership {

@@ -9,6 +9,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useForm } from "react-hook-form";
+import JoinOrgForm from "./_joinOrgForm/joinOrgForm";
+import CreateOrgForm from "./_createOrgForm/createOrgForm";
+
 import {
   Form,
   FormControl,
@@ -20,7 +23,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { CreateOrg } from "@/server/actions/createOrg";
 import { useAction } from "next-safe-action/hooks";
-import { newOrgSchema } from "@/types/newOrgSchema";
+import { newOrgSchema, orgInvite } from "@/types/newOrgSchema";
 import * as z from "zod";
 
 import { cn } from "@/lib/utils";
@@ -29,26 +32,32 @@ import { buttonVariants } from "@/components/ui/button";
 import loginArt from "@/public/loginArt2.png";
 
 export default function OnboardingPage() {
-  const [orgName, setOrgName] = useState("");
-  const [orgDescription, setOrgDescription] = useState("");
-  const [inviteCode, setInviteCode] = useState("");
+  // const [orgName, setOrgName] = useState("");
+  // const [orgDescription, setOrgDescription] = useState("");
+  // const [inviteCode, setInviteCode] = useState("");
 
-  const { execute, isExecuting } = useAction(CreateOrg, {});
+  // const { execute, isExecuting } = useAction(CreateOrg, {});
 
-  async function handleCreateSubmit(values: z.infer<typeof newOrgSchema>) {
-    console.log("handle createsubmit hit");
-    execute(values);
-  }
+  // async function handleCreateSubmit(values: z.infer<typeof newOrgSchema>) {
+  //   console.log("handle createsubmit hit");
+  //   execute(values);
+  // }
 
-  const handleJoinSubmit = (e: React.FormEvent) => {};
+  // const handleJoinSubmit = (e: React.FormEvent) => {};
 
-  const form = useForm<z.infer<typeof newOrgSchema>>({
-    resolver: zodResolver(newOrgSchema),
-    defaultValues: {
-      name: "",
-      desc: "",
-    },
-  });
+  // const form = useForm<z.infer<typeof newOrgSchema>>({
+  //   resolver: zodResolver(newOrgSchema),
+  //   defaultValues: {
+  //     name: "",
+  //     desc: "",
+  //   },
+  // });
+  // const joinForm = useForm<z.infer<typeof orgInvite>>({
+  //   resolver: zodResolver(orgInvite),
+  //   defaultValues: {
+  //     code: "",
+  //   },
+  // });
 
   return (
     <>
@@ -114,70 +123,10 @@ export default function OnboardingPage() {
                 <TabsTrigger value="join">Join organisation</TabsTrigger>
               </TabsList>
               <TabsContent value="create">
-                <Form {...form}>
-                  <form
-                    onSubmit={form.handleSubmit(handleCreateSubmit)}
-                    className="space-y-4 mt-4"
-                  >
-                    <div className="space-y-2">
-                      <Label htmlFor="org-name">Organisation Name</Label>
-                      <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input placeholder="Enter organisation name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      {/* <Input
-                        id="org-name"
-                        value={orgName}
-                        onChange={(e) => setOrgName(e.target.value)}
-                        placeholder="Enter organisation name"
-                      /> */}
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="org-description">
-                        Organisation Description
-                      </Label>
-                      <FormField
-                        control={form.control}
-                        name="desc"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Textarea placeholder="Enter organisation description" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <Button type="submit" className="w-full">
-                      Create organisation
-                    </Button>
-                  </form>
-                </Form>
+                <CreateOrgForm/>
               </TabsContent>
               <TabsContent value="join">
-                <form onSubmit={handleJoinSubmit} className="space-y-4 mt-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="invite-code">Invite Code</Label>
-                    <Input
-                      id="invite-code"
-                      value={inviteCode}
-                      onChange={(e) => setInviteCode(e.target.value)}
-                      placeholder="Enter invite code"
-                    />
-                  </div>
-                  <Button type="submit" className="w-full">
-                    Join organisation
-                  </Button>
-                </form>
+                <JoinOrgForm />
               </TabsContent>
             </Tabs>
           </div>

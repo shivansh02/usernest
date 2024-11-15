@@ -5,3 +5,7 @@ export const newOrgSchema = z.object({
     desc: z.string().min(2).max(30),
     
 });
+
+export const orgInvite = z.object({
+    code: z.string().min(6).max(6)
+})
