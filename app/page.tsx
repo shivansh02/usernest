@@ -154,7 +154,7 @@ export default function CustomSidebar() {
     console.log("frontend orgs: ", orgs)
   }, [])
   
-  const {organisationId} = useDashboardStore()
+  const {organisationId, organisationName} = useDashboardStore()
   return (
     <SidebarProvider>
       <AppSidebar/>

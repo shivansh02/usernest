@@ -1,10 +1,12 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Check, ChevronsUpDown } from "lucide-react"
-
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import * as React from "react";
+import { useEffect, useState } from "react";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { getOrgs } from "@/server/actions/getOrgs";
+import { getMemberships } from "@/server/actions/getMemberships";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -12,41 +14,35 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import useDashboardStore from "@/hooks/useDashboardStore"
+} from "@/components/ui/popover";
+import useDashboardStore from "@/hooks/useDashboardStore";
 
-const orgs = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-]
+interface Organisation {
+  id: string;
+  name: string;
+  role: string;
+}
 
 export function OrgCombo() {
-  const [open, setOpen] = React.useState(false)
-  // const [value, setValue] = React.useState("")
-  const {organisationId, setOrganisationId} = useDashboardStore()
+  useEffect(() => {
+    async function fetchOrgs() {
+      const orgs = (await getMemberships()) as Organisation[];
+      console.log(orgs);
+      setFetchedOrgs(orgs);
+    }
+    fetchOrgs();
+  }, []);
+
+  const [open, setOpen] = React.useState(false);
+  const { organisationId, setOrganisationId } = useDashboardStore();
+  const [fetchedOrgs, setFetchedOrgs] = useState<
+    { id: string; name: string; role: string }[]
+  >([]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -58,7 +54,7 @@ export function OrgCombo() {
           className="w-[200px] justify-between"
         >
           {organisationId
-            ? orgs.find((org) => org.value === organisationId)?.label
+            ? fetchedOrgs.find((org) => org.id === organisationId)?.name
             : "Select Organisation"}
           <ChevronsUpDown className="opacity-50" />
         </Button>
@@ -67,22 +63,24 @@ export function OrgCombo() {
         <Command>
           <CommandInput placeholder="Search organisation..." />
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>No organisation found</CommandEmpty>
             <CommandGroup>
-              {orgs.map((org) => (
+              {fetchedOrgs.map((org) => (
                 <CommandItem
-                  key={org.value}
-                  value={org.value}
+                  key={org.id}
+                  value={org.id}
                   onSelect={(currentValue: any) => {
-                    setOrganisationId(currentValue === organisationId ? "" : currentValue)
-                    setOpen(false)
+                    setOrganisationId(
+                      currentValue === organisationId ? "" : currentValue
+                    );
+                    setOpen(false);
                   }}
                 >
-                  {org.label}
+                  {org.name}
                   <Check
                     className={cn(
                       "ml-auto",
-                      organisationId === org.value ? "opacity-100" : "opacity-0"
+                      organisationId === org.name ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>
@@ -92,5 +90,5 @@ export function OrgCombo() {
         </Command>
       </PopoverContent>
     </Popover>
-  )
+  );
 }
