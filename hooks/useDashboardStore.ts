@@ -4,6 +4,7 @@ interface DashboardState {
     organisationId: string | null;
     organisationName: string | null
     setOrganisationId: (organisationId: string) => void;
+    setOrganisationName: (organisationId: string) => void;
 }
 
 

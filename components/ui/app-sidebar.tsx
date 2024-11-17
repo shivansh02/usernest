@@ -17,18 +17,30 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Home, Settings, Users, User, Menu, X, ChevronsUpDown } from "lucide-react";
+} from "@/components/ui/dropdown-menu";
+import {
+  Home,
+  Settings,
+  Users,
+  User,
+  Menu,
+  X,
+  ChevronsUpDown,
+} from "lucide-react";
 import { OrgCombo } from "@/components/ui/org-combo";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import {auth} from "@/server/auth"
+import { auth } from "@/server/auth";
 
 const menuItems = [
   { icon: Home, label: "Home", href: "/" },
   { icon: Users, label: "Organisations", href: "/organisations" },
   { icon: User, label: "Profile", href: "/profile" },
 ];
-export function AppSidebar() {
+
+export async function AppSidebar() {
+  const session = await auth();
+  const user = session?.user;
+
   return (
     <Sidebar className="border-r">
       <SidebarHeader className="p-4">
@@ -55,36 +67,40 @@ export function AppSidebar() {
           <AvatarFallback>CN</AvatarFallback>{" "}
         </Avatar> */}
         <SidebarMenu>
-            <SidebarMenuItem>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <SidebarMenuButton
-                    size="lg"
-                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                  >
-                    <Avatar className="size-8">
-                      <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col items-start gap-0.5 leading-none">
-                      <span className="font-semibold">John Doe</span>
-                      <span className="text-xs text-muted-foreground">john@example.com</span>
-                    </div>
-                    <ChevronsUpDown className="ml-auto size-4" />
-                  </SidebarMenuButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  className="w-[--radix-dropdown-menu-trigger-width]"
-                  align="start"
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton
+                  size="lg"
+                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
-                  <DropdownMenuItem>Profile</DropdownMenuItem>
-                  <DropdownMenuItem>Settings</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>Log out</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </SidebarMenuItem>
-          </SidebarMenu>
+                  <Avatar className="size-8 border-2 border-gray-500 rounded-full">
+                    <AvatarImage src={user?.image} alt="@shadcn" />
+                    <AvatarFallback className="flex items-center justify-center mt-1.5">
+                      <User className="size-4" />
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col items-start gap-0.5 leading-none">
+                    <span className="font-semibold">{user?.name}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {user?.email}
+                    </span>
+                  </div>
+                  <ChevronsUpDown className="ml-auto size-4" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className="w-[--radix-dropdown-menu-trigger-width]"
+                align="start"
+              >
+                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Log out</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
   );

@@ -39,7 +39,7 @@ export function OrgCombo() {
   }, []);
 
   const [open, setOpen] = React.useState(false);
-  const { organisationId, setOrganisationId } = useDashboardStore();
+  const { organisationId, setOrganisationId, setOrganisationName } = useDashboardStore();
   const [fetchedOrgs, setFetchedOrgs] = useState<
     { id: string; name: string; role: string }[]
   >([]);
@@ -61,7 +61,7 @@ export function OrgCombo() {
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="Search organisation..." />
+          {/* <CommandInput placeholder="Search organisation..." /> */}
           <CommandList>
             <CommandEmpty>No organisation found</CommandEmpty>
             <CommandGroup>
@@ -71,8 +71,10 @@ export function OrgCombo() {
                   value={org.id}
                   onSelect={(currentValue: any) => {
                     setOrganisationId(
-                      currentValue === organisationId ? "" : currentValue
+                      currentValue
                     );
+                    // setOrganisationName(fetchedOrgs.find())
+                    setOrganisationName(fetchedOrgs.find((org) => org.id === currentValue)?.name || "");
                     setOpen(false);
                   }}
                 >

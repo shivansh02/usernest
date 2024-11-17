@@ -156,8 +156,7 @@ export default function CustomSidebar() {
   
   const {organisationId, organisationName} = useDashboardStore()
   return (
-    <SidebarProvider>
-      <AppSidebar/>
+
       <div className="flex-1">
         <header className="flex h-16 items-center gap-4 border-b px-6">
           <SidebarTrigger />
@@ -168,7 +167,7 @@ export default function CustomSidebar() {
           <p>Main content area</p>
         </main>
       </div>
-    </SidebarProvider>
+    // </SidebarProvider>
   )
 }
 

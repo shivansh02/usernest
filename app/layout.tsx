@@ -28,17 +28,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-          {/* <SidebarProvider> */}
-          {/* <AppSidebar /> */}
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <main>
-          {/* <SidebarTrigger/> */}
+          <SidebarProvider><AppSidebar/>
           {children}
+          </SidebarProvider>
         </main>
+        
       </body>
-      {/* </SidebarProvider> */}
     </html>
   );
 }

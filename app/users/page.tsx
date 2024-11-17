@@ -39,17 +39,14 @@ export default function UsersListPage() {
   }, [organisationId]);
  
   return (
-    <SidebarProvider>
-      <AppSidebar />
       <div className="flex-1">
         <header className="flex h-16 items-center gap-4 border-b px-6">
           <SidebarTrigger />
-          <h1 className="font-semibold">OrgName</h1>
+          <h1 className="text-xl">{organisationName}</h1>
         </header>
         <main className="flex-1 p-6">
           <DataTable columns={columns} data={fetchedOrgs} />
         </main>
       </div>
-    </SidebarProvider>
   );
 }
