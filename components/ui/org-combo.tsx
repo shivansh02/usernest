@@ -34,8 +34,14 @@ export function OrgCombo() {
       const orgs = (await getMemberships()) as Organisation[];
       console.log(orgs);
       setFetchedOrgs(orgs);
+      console.log("here", orgs);
+      if (!organisationId && orgs.length > 0) {
+        setOrganisationId(orgs[0].id);
+        setOrganisationName(orgs[0].name);
+      }
     }
     fetchOrgs();
+    console.log(organisationId);
   }, []);
 
   const [open, setOpen] = React.useState(false);
