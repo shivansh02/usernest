@@ -183,9 +183,9 @@ export default function UserTable() {
             variant="ghost"
             className="h-8 w-8 p-0"
             onClick={async () => {
-              console.log("delete button hit")
+              console.log("delete button hit");
               if (organisationId) {
-                console.log("org exists")
+                console.log("org exists");
                 const success = await DeleteMembership(user.id, organisationId);
                 if (success) {
                   setusers((prevUsers) =>
@@ -234,9 +234,14 @@ export default function UserTable() {
           className="max-w-sm"
         />
         <Select
-          onValueChange={(value: any) =>
-            table.getColumn("role")?.setFilterValue(value)
-          }
+          onValueChange={(value: any) => {
+            console.log("value: ", value)
+            if (value === "all") {
+              table.getColumn("role")?.setFilterValue(undefined);
+            } else {
+              table.getColumn("role")?.setFilterValue(value);
+            }
+          }}
         >
           <SelectTrigger className="w-[180px] ml-4">
             <SelectValue placeholder="Select a role" />
