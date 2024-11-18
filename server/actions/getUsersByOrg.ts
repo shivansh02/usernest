@@ -19,7 +19,7 @@ export async function GetUsersByOrg(orgId: string) {
         }
     })
     const users = memberships.map((membership) => ({
-        // id: membership.user.id,
+        id: membership.user.id,
         email: membership.user.email,
         name: membership.user.name,
         role: membership.role

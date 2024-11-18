@@ -1,8 +1,11 @@
+
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/ui/app-sidebar"
+import { ThemeProvider } from 'next-themes'
+
 
 
 const geistSans = localFont({
@@ -27,14 +30,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <main>
+          <ThemeProvider>
           <SidebarProvider><AppSidebar/>
           {children}
           </SidebarProvider>
+          </ThemeProvider>
         </main>
         
       </body>

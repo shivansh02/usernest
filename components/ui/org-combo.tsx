@@ -69,6 +69,7 @@ export function OrgCombo() {
                 <CommandItem
                   key={org.id}
                   value={org.id}
+                  className={cn( organisationId === org.id ? " font-semibold" : "text-black")}
                   onSelect={(currentValue: any) => {
                     setOrganisationId(
                       currentValue

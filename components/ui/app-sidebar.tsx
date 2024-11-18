@@ -1,3 +1,4 @@
+
 import {
   Sidebar,
   SidebarContent,
@@ -26,10 +27,12 @@ import {
   Menu,
   X,
   ChevronsUpDown,
+  Moon,
 } from "lucide-react";
 import { OrgCombo } from "@/components/ui/org-combo";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { auth } from "@/server/auth";
+import { useTheme } from "next-themes";
 
 const menuItems = [
   { icon: Home, label: "Home", href: "/" },
@@ -40,6 +43,7 @@ const menuItems = [
 export async function AppSidebar() {
   const session = await auth();
   const user = session?.user;
+
 
   return (
     <Sidebar className="border-r">

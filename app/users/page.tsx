@@ -14,16 +14,10 @@ import { GetUsersByOrg } from "@/server/actions/getUsersByOrg";
 // }
 
 export default function UsersListPage() {
-  const [data, setData] = useState<
-    | {
-        user: { role: string; name: string | null; email: string };
-        role: string;
-      }[]
-    | undefined
-  >(undefined);
+ 
   const { organisationId, organisationName } = useDashboardStore();
 
-  const [fetchedOrgs, setFetchedOrgs] = useState<
+  const [users, setusers] = useState<
     {email: string; name: string; role: string }[]
   >([]);
 
@@ -32,7 +26,7 @@ export default function UsersListPage() {
       if (organisationId) {
         const users = (await GetUsersByOrg(organisationId)) as User[];
         console.log(users);
-        setFetchedOrgs(users);
+        setusers(users);
       }
     }
     fetchOrgs();
@@ -45,7 +39,7 @@ export default function UsersListPage() {
           <h1 className="text-xl">{organisationName}</h1>
         </header>
         <main className="flex-1 p-6">
-          <DataTable columns={columns} data={fetchedOrgs} />
+          <DataTable columns={columns} data={users} />
         </main>
       </div>
   );
