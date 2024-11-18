@@ -14,7 +14,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown } from "lucide-react";
+import { ArrowUpDown, ChevronDown, Trash } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -42,6 +42,8 @@ import {
 import { GetUsersByOrg } from "@/server/actions/getUsersByOrg";
 import useDashboardStore from "@/hooks/useDashboardStore";
 import { changeRole } from "@/server/actions/changeRole";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DeleteMembership } from "@/server/actions/deleteMembership";
 
 type User = {
   id: string;
@@ -76,6 +78,28 @@ export default function UserTable() {
   const [users, setusers] = useState<User[]>([]);
 
   const columns: ColumnDef<User>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
     {
       accessorKey: "name",
       header: ({ column }) => {
@@ -145,6 +169,35 @@ export default function UserTable() {
               <SelectItem value="USER">User</SelectItem>
             </SelectContent>
           </Select>
+        );
+      },
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const user = row.original;
+
+        return (
+          <Button
+            variant="ghost"
+            className="h-8 w-8 p-0"
+            onClick={async () => {
+              console.log("delete button hit")
+              if (organisationId) {
+                console.log("org exists")
+                const success = await DeleteMembership(user.id, organisationId);
+                if (success) {
+                  setusers((prevUsers) =>
+                    prevUsers.filter((u) => u.id !== user.id)
+                  );
+                }
+              }
+            }}
+          >
+            {/* <span className="sr-only">Open menu</span> */}
+            <Trash />
+          </Button>
         );
       },
     },
