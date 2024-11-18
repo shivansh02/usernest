@@ -51,14 +51,14 @@ export async function AppSidebar() {
         {/* <h2 className="text-lg font-semibold">My App</h2> */}
         <OrgCombo />
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="px-4 py-2">
         <SidebarMenu>
           {menuItems.map((item) => (
             <SidebarMenuItem key={item.label}>
               <SidebarMenuButton asChild>
                 <a href={item.href} className="flex items-center gap-2">
                   <item.icon className="h-4 w-4" />
-                  <span>{item.label}</span>
+                  <span className="font-medium">{item.label}</span>
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>
