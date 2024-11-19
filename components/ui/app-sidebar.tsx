@@ -1,4 +1,3 @@
-
 import {
   Sidebar,
   SidebarContent,
@@ -33,6 +32,8 @@ import { OrgCombo } from "@/components/ui/org-combo";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { auth } from "@/server/auth";
 import { useTheme } from "next-themes";
+import {signOut} from "@/server/auth"
+import { UserAvatar } from "../auth/userAvatar";
 
 const menuItems = [
   { icon: Home, label: "Home", href: "/" },
@@ -43,7 +44,6 @@ const menuItems = [
 export async function AppSidebar() {
   const session = await auth();
   const user = session?.user;
-
 
   return (
     <Sidebar className="border-r">
@@ -66,12 +66,9 @@ export async function AppSidebar() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter className="p-4">
-        {/* <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>CN</AvatarFallback>{" "}
-        </Avatar> */}
         <SidebarMenu>
           <SidebarMenuItem>
+            {/* <UserAvatar user={user} /> */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton

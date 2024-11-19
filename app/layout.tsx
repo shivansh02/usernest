@@ -1,12 +1,10 @@
-
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/ui/app-sidebar"
-import { ThemeProvider } from 'next-themes'
-
-
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/ui/app-sidebar";
+import { ThemeProvider } from "next-themes";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -36,12 +34,13 @@ export default function RootLayout({
       >
         <main>
           <ThemeProvider>
-          <SidebarProvider><AppSidebar/>
-          {children}
-          </SidebarProvider>
+            <SidebarProvider>
+              <AppSidebar />
+              {children}
+              <Toaster />
+            </SidebarProvider>
           </ThemeProvider>
         </main>
-        
       </body>
     </html>
   );

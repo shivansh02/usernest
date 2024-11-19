@@ -26,7 +26,7 @@ export default function CustomSidebar() {
         <header className="flex h-16 items-center gap-4 border-b px-6">
           <SidebarTrigger />
           <div className='flex items-center justify-between w-full'>
-          <h1 className="font-semibold">{organisationId}</h1>
+          <h1 className="font-semibold">{organisationName}</h1>
 
           <Toggle onChange={()=> {setTheme(theme === 'light' ? 'dark' : 'light')}}>
             <MoonIcon />
