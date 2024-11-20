@@ -57,15 +57,16 @@ model VerificationToken {
 }
 
 model Organisation {
-  id         String       @id @default(cuid())
-  name       String
-  desc       String
-  creatorId  String
-  creator    User         @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  members    Membership[]
-  inviteCode String?       @unique
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
+  id             String           @id @default(cuid())
+  name           String
+  desc           String
+  creatorId      String
+  creator        User             @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  members        Membership[]
+  inviteCode     String?          @unique
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  RolePermission RolePermission[]
 }
 
 model Membership {
@@ -81,6 +82,24 @@ model Membership {
   updatedAt DateTime @updatedAt
 
   @@unique([userId, organisationId])
+}
+
+model Permission {
+  id    String           @id @default(cuid())
+  name  String           @unique
+  desc  String
+  roles RolePermission[]
+}
+
+model RolePermission {
+  id             String       @id @default(cuid())
+  role           Role
+  permissionId   String
+  organisationId String
+  permission     Permission   @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  organisation   Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+
+  @@unique([role, permissionId, organisationId])
 }
 
 enum Role {
