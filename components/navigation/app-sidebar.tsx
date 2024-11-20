@@ -21,9 +21,12 @@ import {
 import {
   Home,
   Settings,
+  Plus,
   Users,
   User,
+  ListCollapse,
   Menu,
+  ChartBar,
   X,
   ChevronsUpDown,
   Moon,
@@ -34,11 +37,16 @@ import { auth } from "@/server/auth";
 import { useTheme } from "next-themes";
 import {signOut} from "@/server/auth"
 import { UserAvatar } from "../auth/userAvatar";
+import Image from "next/image";
+import usernestLogo from "@/public/usernest.svg";
 
 const menuItems = [
   { icon: Home, label: "Home", href: "/" },
-  { icon: Users, label: "Organisations", href: "/organisations" },
-  { icon: User, label: "Profile", href: "/profile" },
+  { icon: Plus, label: "Create or Join Org", href: "/create-org" },
+  { icon: ListCollapse, label: "Org Details", href: "/org-details" },
+  { icon: Users, label: "Manage Members", href: "/user-action" },
+  { icon: Users, label: "View Members", href: "/users" },
+  { icon: ChartBar, label: "Analytics", href: "/analytics" },
 ];
 
 export async function AppSidebar() {
@@ -46,13 +54,19 @@ export async function AppSidebar() {
   const user = session?.user;
 
   return (
-    <Sidebar className="border-r">
-      <SidebarHeader className="p-4">
+    <Sidebar className="border-r bg dark text-foreground">
+      <SidebarHeader className="p-6">
+        <div className="flex space-x-2">
+          <Image src={usernestLogo} alt="Usernest" width={32} height={32} />
+        <h1 className="font-bold text-xl my-4 mx-2">usernest</h1>
+        </div>
         {/* <h2 className="text-lg font-semibold">My App</h2> */}
+        {/* <p className="text-muted-foreground text-sm pl-2 pb-1">Organisation</p> */}
         <OrgCombo />
       </SidebarHeader>
       <SidebarContent className="px-4 py-2">
         <SidebarMenu>
+          <SidebarGroupLabel>Links</SidebarGroupLabel>
           {menuItems.map((item) => (
             <SidebarMenuItem key={item.label}>
               <SidebarMenuButton asChild>

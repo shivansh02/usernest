@@ -61,33 +61,27 @@ export const sendVerificationEmail = async (email: string, token: string) => {
 
 
 export const verifyToken = async (token: string) => {
-    const existingToken = await prisma.verificationToken.findFirst({
-        where: {
-            token: token
-        }
-    })
-    if(!existingToken) return ({Failure: "Invalid token"})
-    if(existingToken.expires < new Date()) return {Failure: "Token expired"}
+  const existingToken = await prisma.verificationToken.findFirst({
+      where: { token },
+  });
 
-    const existingUser = await prisma.user.findUnique({
-        where: {
-            email: existingToken.email
-        }
-    })
-    if(!existingUser) return {Failure: "Email not registered"}
+  if (!existingToken) return { success: false, message: "Invalid token" };
+  if (existingToken.expires < new Date()) return { success: false, message: "Token expired" };
 
-    await prisma.user.update({
-        data: {
-            emailVerified: new Date()
-        },
-        where : {
-            email: existingUser.email
-        }
-    })
+  const existingUser = await prisma.user.findUnique({
+      where: { email: existingToken.email },
+  });
 
-    await prisma.verificationToken.delete({
-        where: {
-            id: existingToken.id
-        }
-    })
-}
+  if (!existingUser) return { success: false, message: "Email not registered" };
+
+  await prisma.user.update({
+      data: { emailVerified: new Date() },
+      where: { email: existingUser.email },
+  });
+
+  await prisma.verificationToken.delete({
+      where: { id: existingToken.id },
+  });
+
+  return { success: true, message: "Token verified successfully" };
+};

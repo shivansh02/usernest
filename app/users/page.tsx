@@ -2,7 +2,7 @@
 import { User, columns } from "./columns";
 import { DataTable } from "./data-table";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/ui/app-sidebar";
+import { AppSidebar } from "@/components/navigation/app-sidebar";
 import useDashboardStore from "@/hooks/useDashboardStore";
 import { useEffect, useState } from "react";
 import { GetUsersByOrg } from "@/server/actions/getUsersByOrg";
