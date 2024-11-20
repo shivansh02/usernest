@@ -38,6 +38,7 @@ import {
   RefreshCw,
   CalendarCheck2,
 } from "lucide-react";
+import useDashboardStore from "@/hooks/useDashboardStore";
 
 export default function OrganizationDashboard() {
   interface OrgDetails {
@@ -62,16 +63,21 @@ export default function OrganizationDashboard() {
   const [editedName, setEditedName] = useState("");
   const [editedDescription, setEditedDescription] = useState("");
   const { toast } = useToast();
+  const {organisationId} = useDashboardStore();
 
   useEffect(() => {
     const fetchOrgDetails = async () => {
-      const res = await GetOrgDetails("cm3ionqef0001iddgkvufvs4r");
+      if(!organisationId) {console.log("No organisation ID found");
+        return;
+      }
+      
+      const res = await GetOrgDetails(organisationId);
       setOrgData(res);
       setEditedName(res.orgDetails.name);
       setEditedDescription(res.orgDetails.desc);
     };
     fetchOrgDetails();
-  }, []);
+  }, [organisationId]);
 
   if (!orgData) {
     return <div>Loading...</div>;
