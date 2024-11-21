@@ -5,6 +5,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/navigation/app-sidebar";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster";
+import { SessionProvider } from "next-auth/react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,15 +33,17 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <main>
-          <ThemeProvider>
-            <SidebarProvider>
-              <AppSidebar />
-              {children}
-              <Toaster />
-            </SidebarProvider>
-          </ThemeProvider>
-        </main>
+        <SessionProvider>
+          <main>
+            <ThemeProvider>
+              <SidebarProvider>
+                <AppSidebar />
+                {children}
+                <Toaster />
+              </SidebarProvider>
+            </ThemeProvider>
+          </main>
+        </SessionProvider>
       </body>
     </html>
   );

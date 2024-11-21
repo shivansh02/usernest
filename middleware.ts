@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import authConfig from "./server/auth.config";
 import NextAuth from "next-auth";
 

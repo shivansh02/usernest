@@ -87,7 +87,7 @@ export default function OnboardingPage() {
           </Toggle>
           </div>
         </header>
-    <div className="w-full flex-grow flex flex-col justify-center items-center pb-8">
+      <div className="w-full flex-grow flex flex-col justify-center items-center pb-8">
         {/* <Image
           src={BgArt}
           alt="Authentication"

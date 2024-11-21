@@ -38,14 +38,17 @@ export function OrgCombo() {
         setOrganisationName(orgs[0].name);
       }
     }
-    fetchOrgs();
+    if (fetchedOrgs.length === 0) fetchOrgs();
   }, []);
 
   const [open, setOpen] = React.useState(false);
-  const { organisationId, setOrganisationId, setOrganisationName } = useDashboardStore();
-  const [fetchedOrgs, setFetchedOrgs] = useState<
-    { id: string; name: string; role: string }[]
-  >([]);
+  const {
+    organisationId,
+    setOrganisationId,
+    setOrganisationName,
+    fetchedOrgs,
+    setFetchedOrgs,
+  } = useDashboardStore();
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -72,13 +75,16 @@ export function OrgCombo() {
                 <CommandItem
                   key={org.id}
                   value={org.id}
-                  className={cn( organisationId === org.id ? " font-semibold" : "text-black")}
+                  className={cn(
+                    organisationId === org.id ? " font-semibold" : "text-black"
+                  )}
                   onSelect={(currentValue: any) => {
-                    setOrganisationId(
-                      currentValue
-                    );
+                    setOrganisationId(currentValue);
                     // setOrganisationName(fetchedOrgs.find())
-                    setOrganisationName(fetchedOrgs.find((org) => org.id === currentValue)?.name || "");
+                    setOrganisationName(
+                      fetchedOrgs.find((org) => org.id === currentValue)
+                        ?.name || ""
+                    );
                     setOpen(false);
                   }}
                 >
