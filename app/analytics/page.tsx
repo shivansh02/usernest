@@ -8,6 +8,9 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { StackedChart } from './_stackedChart/stackedChart'
 import { GrowthChart } from './growthChart/growthChart'
 import { SidebarTrigger } from '@/components/ui/sidebar'
+import useDashboardStore from '@/hooks/useDashboardStore'
+import { TriangleAlert } from 'lucide-react'
+import NoPermission from '@/components/common/noPermission'
 
 const data = [
   { name: "Jan", total: 1200 },
@@ -110,10 +113,24 @@ const cardData = [
 
 export default function AnalyticsDashboard() {
   const [shouldAnimate, setShouldAnimate] = useState(false)
+  const [error, setError] = useState<string | null>(null);
+  const {perms, organisationId } = useDashboardStore();
 
   useEffect(() => {
+    if(perms.length === 0) return;
+    const permsArray = perms.map((perm) => perm.name);
+    console.log("permsArray: ", permsArray);
+    if(!permsArray.includes("VIEW_ANALYTICS")) {
+      setError("You do not have permission to view this page");}
+      else {setError(null)}
     setShouldAnimate(true)
-  }, [])
+  }, [perms])
+
+  if(error) {
+    return (
+      <NoPermission/>
+    )
+  }
 
   return (
     <div className="flex flex-col min-h-screen w-full">

@@ -45,6 +45,7 @@ import { changeRole } from "@/server/actions/changeRole";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DeleteMembership } from "@/server/actions/deleteMembership";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import NoPermission  from "@/components/common/noPermission";
 
 type User = {
   id: string;
@@ -56,17 +57,29 @@ type User = {
 type Role = "ADMIN" | "MANAGER" | "USER";
 
 export default function UserTable() {
-  const { organisationId, organisationName } = useDashboardStore();
+  const { organisationId, organisationName, perms } = useDashboardStore();
   useEffect(() => {
-    async function fetchOrgs() {
+    async function fetchUsers() {
+      setLoading(true);
       if (organisationId) {
         const users = (await GetUsersByOrg(organisationId)) as User[];
-        // console.log("users:::", users);
         setusers(users);
       }
+      setLoading(false);
     }
-    fetchOrgs();
+    if (perms.length === 0) return;
+    const permsArray = perms.map((perm) => perm.name);
+    console.log("permsArray: ", permsArray);
+    if (!permsArray.includes("VIEW_ANALYTICS")) {
+      setError("You do not have permission to view this page");
+    } else {
+      setError(null);
+      fetchUsers();
+    }
   }, [organisationId]);
+
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -223,6 +236,11 @@ export default function UserTable() {
     },
   });
 
+  if(error) {
+    return (
+      <NoPermission/>
+    )
+  }
   return (
     <div className="w-full flex-1">
       <header className="flex h-16 items-center gap-4 border-b px-6">
