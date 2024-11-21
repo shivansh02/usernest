@@ -82,27 +82,28 @@ export function AppSidebar() {
   // const session = await auth();
   const { data: session } = useSession()
   const user = session?.user
-  const {perms, setPerms} = useDashboardStore();
+  const {perms, setPerms, organisationId, permsOrg, setPermsOrg} = useDashboardStore();
   const [loading, setLoading] = useState(false);
 
 
   useEffect(() => {
     async function getPerms() {
       setLoading(true)
-      const perms = await getPerms2("cm3ionqef0001iddgkvufvs4r");
+      if(!organisationId) return;
+      const perms = await getPerms2(organisationId);
       console.log("perms: ", perms);
       if (Array.isArray(perms)) {
         setPerms(perms);
+        setPermsOrg(organisationId);
       } else {
         console.error("Failed to fetch permissions:", perms.failure);
       }
       setLoading(false)
     }
-    if(perms.length === 0) getPerms();
+    if(perms.length === 0 || permsOrg==null || permsOrg != organisationId) getPerms();
     
-  }, []);
+  }, [organisationId]);
 
-console.log("perms in page: ", perms);
 
   if(loading) {
     return (
@@ -169,8 +170,8 @@ console.log("perms in page: ", perms);
   const filteredPermissions = menuItems.filter((item)=> 
     !item.permission || userPermissions.includes(item.permission)
   );
-  console.log("userperms: ", userPermissions);
-  console.log("filtered: ", filteredPermissions);
+  // console.log("userperms: ", userPermissions);
+  // console.log("filtered: ", filteredPermissions);
   
   return (
     <Sidebar className="border-r bg dark text-foreground">

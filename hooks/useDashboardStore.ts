@@ -18,10 +18,12 @@ interface DashboardState {
     organisationName: string | null
     fetchedOrgs: Organisation[]
     perms: Perm[]
+    permsOrg: string | null
     setOrganisationId: (organisationId: string) => void;
     setOrganisationName: (organisationId: string) => void;
     setFetchedOrgs: (organisation: Organisation[]) => void;
     setPerms: (perms: Perm[]) => void;
+    setPermsOrg: (permsOrg: string) => void;
 }
 
 
@@ -31,10 +33,12 @@ const useDashboardStore = create<DashboardState>((set) => ({
     organisationName: null,
     fetchedOrgs: [],
     perms: [],
+    permsOrg: null,
     setPerms: (perms: Perm[]) => set((state) => ({ perms: perms })),
     setOrganisationId: (organisationId: string) => set((state) => ({ organisationId: organisationId })),
     setOrganisationName: (organisationName: string) => set((state) => ({ organisationName: organisationName })),
-    setFetchedOrgs: (organisation: Organisation[]) => set((state) => ({ fetchedOrgs: organisation }))
+    setFetchedOrgs: (organisation: Organisation[]) => set((state) => ({ fetchedOrgs: organisation })),
+    setPermsOrg: (permsOrg: string) => set((state) => ({ permsOrg: permsOrg})),
 }))
 
 

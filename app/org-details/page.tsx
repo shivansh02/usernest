@@ -37,6 +37,7 @@ import {
   Copy,
   RefreshCw,
   CalendarCheck2,
+  Trash,
 } from "lucide-react";
 import useDashboardStore from "@/hooks/useDashboardStore";
 
@@ -386,12 +387,16 @@ export default function OrganizationDashboard() {
           </CardHeader>
           <CardContent className="flex gap-4">
             <Button>
-              <BarChart className="mr-2 h-4 w-4" />
+              <BarChart className=" h-4 w-4" />
               View Full Analytics
             </Button>
             <Button variant="outline">
-              <Users className="mr-2 h-4 w-4" />
+              <Users className="h-4 w-4" />
               Manage Members
+            </Button>
+            <Button variant="destructive">
+              <Trash className="h-4 w-4" />
+              Delete Organisation
             </Button>
           </CardContent>
         </Card>

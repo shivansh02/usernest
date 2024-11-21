@@ -39,6 +39,7 @@ export default function UsersListPage() {
           <h1 className="text-xl">{organisationName}</h1>
         </header>
         <main className="flex-1 p-6">
+          <h1 className="my-2 text-xl text-gray-500">Users in your organisation</h1>
           <DataTable columns={columns} data={users} />
         </main>
       </div>
