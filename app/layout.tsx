@@ -36,11 +36,11 @@ export default function RootLayout({
         <SessionProvider>
           <main>
             <ThemeProvider>
-              <SidebarProvider>
-                <AppSidebar />
+              {/* <SidebarProvider> */}
+                {/* <AppSidebar /> */}
                 {children}
                 <Toaster />
-              </SidebarProvider>
+              {/* </SidebarProvider> */}
             </ThemeProvider>
           </main>
         </SessionProvider>

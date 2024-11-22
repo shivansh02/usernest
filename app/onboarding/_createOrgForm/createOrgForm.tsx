@@ -18,13 +18,19 @@ import { CreateOrg } from "@/server/actions/createOrg";
 import { useAction } from "next-safe-action/hooks";
 import { newOrgSchema } from "@/types/newOrgSchema";
 import * as z from "zod";
+import { useRouter } from "next/navigation";
+import useDashboardStore from "@/hooks/useDashboardStore";
 
 export default function CreateOrgForm() {
-  const { execute, isExecuting } = useAction(CreateOrg, {});
+  const { execute, isExecuting, result, status } = useAction(CreateOrg, {});
+  const router = useRouter();
+  const { setOrganisationId, setOrganisationName } = useDashboardStore();
 
   async function handleCreateSubmit(values: z.infer<typeof newOrgSchema>) {
     console.log("handle joinsubmit hit");
     execute(values);
+    // set organisation id and name if successful
+    router.push("/org-details");
   }
 
   const form = useForm<z.infer<typeof newOrgSchema>>({

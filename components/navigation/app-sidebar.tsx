@@ -48,26 +48,26 @@ const menuItems = [
   {
     icon: Plus,
     label: "Create or Join Org",
-    href: "/create-org",
+    href: "/dashboard/create-org",
     permission: null,
   },
   {
     icon: ListCollapse,
     label: "Org Details",
-    href: "/org-details",
+    href: "/dashboard/org-details",
     permission: "VIEW_ORG_DETAILS",
   },
   {
     icon: Users,
     label: "Manage Members",
-    href: "/user-action",
+    href: "/dashboard/user-action",
     permission: "MANAGE_USERS",
   },
 { icon: Users, label: "View Members", href: "/users", permission: null },
   {
     icon: ChartBar,
     label: "Analytics",
-    href: "/analytics",
+    href: "/dashboard/analytics",
     permission: "VIEW_ANALYTICS",
   },
 ];
@@ -130,8 +130,6 @@ export function AppSidebar() {
   const filteredPermissions = menuItems.filter((item)=> 
     !item.permission || userPermissions.includes(item.permission)
   );
-  // console.log("userperms: ", userPermissions);
-  // console.log("filtered: ", filteredPermissions);
   
   return (
     <Sidebar className="border-r bg dark text-foreground">
@@ -140,8 +138,6 @@ export function AppSidebar() {
           <Image src={usernestLogo} alt="Usernest" width={32} height={32} />
           <h1 className="font-bold text-xl my-4 mx-2">usernest</h1>
         </div>
-        {/* <h2 className="text-lg font-semibold">My App</h2> */}
-        {/* <p className="text-muted-foreground text-sm pl-2 pb-1">Organisation</p> */}
         <OrgCombo />
       </SidebarHeader>
       <SidebarContent className="px-4 py-2">
