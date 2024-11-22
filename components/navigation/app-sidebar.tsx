@@ -67,7 +67,7 @@ const menuItems = [
     icon: Users,
     label: "Manage Members",
     href: "/user-action",
-    permission: "MANAGE_MEMBERS",
+    permission: "MANAGE_USERS",
   },
 { icon: Users, label: "View Members", href: "/users", permission: null },
   {
@@ -90,13 +90,13 @@ export function AppSidebar() {
     async function getPerms() {
       setLoading(true)
       if(!organisationId) return;
-      const perms = await getPerms2(organisationId);
-      console.log("perms: ", perms);
-      if (Array.isArray(perms)) {
-        setPerms(perms);
+      const fetchedPerms = await getPerms2(organisationId);
+      console.log("perms in sidebar: ", fetchedPerms);
+      if (Array.isArray(fetchedPerms)) {
+        setPerms(fetchedPerms);
         setPermsOrg(organisationId);
       } else {
-        console.error("Failed to fetch permissions:", perms.failure);
+        console.error("Failed to fetch permissions:", fetchedPerms.failure);
       }
       setLoading(false)
     }

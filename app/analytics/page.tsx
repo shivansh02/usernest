@@ -116,7 +116,7 @@ export default function AnalyticsDashboard() {
   useEffect(() => {
     if(perms.length === 0) return;
     const permsArray = perms.map((perm) => perm.name);
-    console.log("permsArray: ", permsArray);
+    // console.log("permsArray: ", permsArray);
     if(!permsArray.includes("VIEW_ANALYTICS")) {
       setError("You do not have permission to view this page");}
       else {setError(null)}
