@@ -3,8 +3,6 @@ import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
-  SidebarGroup,
-  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
@@ -15,22 +13,18 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
+
   Home,
-  Settings,
   Plus,
   Users,
   User,
   ListCollapse,
-  Menu,
   ChartBar,
-  X,
   ChevronsUpDown,
-  Moon,
 } from "lucide-react";
 import { OrgCombo } from "@/components/ui/org-combo";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
@@ -46,7 +40,7 @@ import { useSession } from "next-auth/react"
 import useDashboardStore from "@/hooks/useDashboardStore";
 import Link from "next/link";
 import { Skeleton } from "../ui/skeleton";
-
+import {SignOutButton} from "./signOutButton";
 
 
 const menuItems = [
@@ -125,42 +119,8 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter className="p-4">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            {/* <UserAvatar user={user} /> */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton
-                  size="lg"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                >
-                  <Avatar className="size-8 border-2 border-gray-500 rounded-full">
-                    <AvatarImage src={user?.image} alt="@shadcn" />
-                    <AvatarFallback className="flex items-center justify-center mt-1.5">
-                      <User className="size-4" />
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex flex-col items-start gap-0.5 leading-none">
-                    <span className="font-semibold">{user?.name}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {user?.email}
-                    </span>
-                  </div>
-                  <ChevronsUpDown className="ml-auto size-4" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-[--radix-dropdown-menu-trigger-width]"
-                align="start"
-              >
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Log out</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
+      <Skeleton className="h-8 mx-2 my-2" />
+        
       </SidebarFooter>
     </Sidebar>
     )
@@ -228,10 +188,7 @@ export function AppSidebar() {
                 className="w-[--radix-dropdown-menu-trigger-width]"
                 align="start"
               >
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Log out</DropdownMenuItem>
+                <DropdownMenuItem><SignOutButton/></DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>
