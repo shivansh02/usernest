@@ -115,7 +115,7 @@ export default function OrganizationDashboard() {
   const [editedName, setEditedName] = useState("");
   const [editedDescription, setEditedDescription] = useState("");
   const { toast } = useToast();
-  const { organisationId } = useDashboardStore();
+  const { organisationId, perms } = useDashboardStore();
 
   const [users, setusers] = useState<
     { email: string; name: string; role: string }[]
@@ -179,21 +179,7 @@ export default function OrganizationDashboard() {
             <CardTitle>Organization Details</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">
-                Founded on{" "}
-                {new Date(orgData.orgDetails.createdAt).toLocaleDateString()}
-              </span>
-            </div>
-            <div className="flex items-center gap-2 mb-4">
-              <Calendar className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">
-                Last updated on{" "}
-                {new Date(orgData.orgDetails.updatedAt).toLocaleDateString()}
-              </span>
-            </div>
-            <div className="text-sm font-semibold mb-2">
+            <div className="text-sm mb-2">
               Created by: {orgData.orgDetails.creator.name}
             </div>
 
@@ -232,9 +218,27 @@ export default function OrganizationDashboard() {
 
         <Card>
           <CardHeader>
-            <CardTitle>RBAC Policies</CardTitle>
+            <CardTitle>Your Permissions</CardTitle>
           </CardHeader>
-          <CardContent></CardContent>
+          <CardContent>
+            {/* <div className="flex items-center gap-2">
+              <ShieldCheck className="h-6 w-6 text-orange-500" />
+              <span className="text-lg font-semibold">Admin</span>
+            </div> */}
+            {/* <div className="text-xs text-muted-foreground">
+            </div> */}
+            <div className="mt-4">
+              {perms.map((perm) => (
+                <Badge
+                  key={perm.id}
+                  variant="secondary"
+                  className="mr-2 px-4 py-2 rounded-full"
+                >
+                  {perm.name}
+                </Badge>
+              ))}
+            </div>
+          </CardContent>
         </Card>
       </div>
       <Card className="mt-6">
@@ -243,7 +247,6 @@ export default function OrganizationDashboard() {
         </CardHeader>
         <CardContent>
           <DataTable columns={columns} data={users} />
-          
         </CardContent>
       </Card>
     </div>

@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import {persist, createJSONStorage} from 'zustand/middleware'
 
 
 interface Organisation {
@@ -27,19 +28,31 @@ interface DashboardState {
 }
 
 
+const useDashboardStore = create<DashboardState>()(
+  persist(
+    (set) => ({
+      organisationId: null,
+      organisationName: null,
+      fetchedOrgs: [],
+      perms: [],
+      permsOrg: null,
+      setOrganisationId: (organisationId: string) => set({ organisationId }),
+      setOrganisationName: (organisationName: string) => set({ organisationName }),
+      setFetchedOrgs: (organisations: Organisation[]) => set({ fetchedOrgs: organisations }),
+      setPerms: (perms: Perm[]) => set({ perms }),
+      setPermsOrg: (permsOrg: string) => set({ permsOrg }),
+    }),
+    {
+      name: 'dashboard-storage',
+      storage: createJSONStorage(() => localStorage), 
+      partialize: (state) => ({
+        organisationId: state.organisationId,
+        organisationName: state.organisationName,
+      }),
+    }
+  )
+);
 
-const useDashboardStore = create<DashboardState>((set) => ({
-    organisationId: null,
-    organisationName: null,
-    fetchedOrgs: [],
-    perms: [],
-    permsOrg: null,
-    setPerms: (perms: Perm[]) => set((state) => ({ perms: perms })),
-    setOrganisationId: (organisationId: string) => set((state) => ({ organisationId: organisationId })),
-    setOrganisationName: (organisationName: string) => set((state) => ({ organisationName: organisationName })),
-    setFetchedOrgs: (organisation: Organisation[]) => set((state) => ({ fetchedOrgs: organisation })),
-    setPermsOrg: (permsOrg: string) => set((state) => ({ permsOrg: permsOrg})),
-}))
 
 
 export default useDashboardStore;

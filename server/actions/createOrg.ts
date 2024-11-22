@@ -9,6 +9,8 @@ export const CreateOrg = actionClient
   .action(async ({ parsedInput: { name, desc } }) => {
     const session = await auth();
     const user = session?.user;
+    const newInvite = Math.floor(100000 + Math.random() * 900000).toString();
+
     if (!user || !user.email) return { failure: "user not logged in" };
 
     try {
@@ -23,6 +25,7 @@ export const CreateOrg = actionClient
           name: name,
           desc: desc,
           creatorId: existingUser.id,
+          inviteCode: newInvite,
         },
       });
       console.log(newOrg);
@@ -34,6 +37,7 @@ export const CreateOrg = actionClient
           role: "ADMIN",
         },
       });
+      return { success: newOrg };
     } catch (error) {
       console.log(error);
     }

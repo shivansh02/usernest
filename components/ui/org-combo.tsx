@@ -33,10 +33,10 @@ export function OrgCombo() {
     async function fetchOrgs() {
       const orgs = (await getMemberships()) as Organisation[];
       setFetchedOrgs(orgs);
-      if (!organisationId && orgs.length > 0) {
-        setOrganisationId(orgs[0].id);
-        setOrganisationName(orgs[0].name);
-      }
+      // if (!organisationId && orgs.length > 0) {
+      //   setOrganisationId(orgs[0].id);
+      //   setOrganisationName(orgs[0].name);
+      // }
     }
     if (fetchedOrgs.length === 0) fetchOrgs();
   }, []);
@@ -76,6 +76,7 @@ export function OrgCombo() {
                   key={org.id}
                   value={org.id}
                   className={cn(
+                    "cursor-pointer",
                     organisationId === org.id ? " font-semibold" : "text-black"
                   )}
                   onSelect={(currentValue: any) => {
