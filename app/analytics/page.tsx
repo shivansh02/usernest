@@ -2,14 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import CountUp from 'react-countup'
-import { Bar, BarChart, Line, LineChart, ResponsiveContainer } from "recharts"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { StackedChart } from './_stackedChart/stackedChart'
 import { GrowthChart } from './growthChart/growthChart'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import useDashboardStore from '@/hooks/useDashboardStore'
-import { TriangleAlert } from 'lucide-react'
 import NoPermission from '@/components/common/noPermission'
 
 const data = [
