@@ -1,5 +1,6 @@
 "use server";
 import { prisma } from "@/server/prisma";
+import { revalidatePath } from "next/cache";
 
 type Role = "ADMIN" | "MANAGER" | "USER";
 
@@ -20,6 +21,7 @@ export async function changeRole(
         role: role as Role,
       },
     });
+    revalidatePath("/dashboard/user-action");
     return { success: "Role changed successfully" };
   } catch (error) {
     return { failure: "Role change failed" };

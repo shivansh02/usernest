@@ -1,10 +1,10 @@
 import { GetOrgDetails } from "@/server/actions/getOrgDetails";
-import { OrgHeader } from "./_components/org-header";
-import { StatsCards } from "./_components/stats-card";
-import { OrgDetailsCard } from "./_components/org-details-card";
-import { InviteCodeCard } from "./_components/invite-code-card";
-import { QuickActionsCard } from "./_components/quick-actions-card";
-// import { RBACPoliciesCard } from "./_components/rbac-policies-card";
+import { OrgHeader } from "./_components/orgHeader";
+import { StatsCards } from "./_components/statsCard";
+import { OrgDetailsCard } from "./_components/orgDetailsCard";
+import { InviteCodeCard } from "./_components/inviteCodeCard";
+import { QuickActionsCard } from "./_components/quickActionsCard";
+import { RBACPoliciesCard } from "./_components/rbacPoliciesCard";
 
 interface PageProps {
   params: {
@@ -44,7 +44,7 @@ export default async function OrganizationDashboard() {
             totalMembers,
           }}
         />
-        {/* <RBACPoliciesCard /> */}
+        <RBACPoliciesCard />
       </div>
 
       <div className="grid gap-6 mt-6 md:grid-cols-2">

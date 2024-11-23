@@ -1,6 +1,6 @@
 "use client";
 import { User, columns } from "./columns";
-import { DataTable } from "./data-table";
+import { DataTable } from "./dataTable";
 import { useState, useCallback, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";

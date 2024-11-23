@@ -1,10 +1,8 @@
-'use client'
-
-import { useEffect, useState } from 'react'
+"use client"
 import CountUp from 'react-countup'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { StackedChart } from './_stackedChart/stackedChart'
-import { GrowthChart } from './growthChart/growthChart'
+import { StackedChart } from './_components/stackedChart'
+import { GrowthChart } from './_components/growthChart'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import useDashboardStore from '@/hooks/useDashboardStore'
 import NoPermission from '@/components/common/noPermission'
@@ -109,25 +107,27 @@ const cardData = [
 ]
 
 export default function AnalyticsDashboard() {
-  const [shouldAnimate, setShouldAnimate] = useState(false)
-  const [error, setError] = useState<string | null>(null);
+  // const [error, setError] = useState<string | null>(null);
   const {perms, organisationId } = useDashboardStore();
-
-  useEffect(() => {
-    if(perms.length === 0) return;
-    const permsArray = perms.map((perm) => perm.name);
-    // console.log("permsArray: ", permsArray);
-    if(!permsArray.includes("VIEW_ANALYTICS")) {
-      setError("You do not have permission to view this page");}
-      else {setError(null)}
-    setShouldAnimate(true)
-  }, [perms])
-
-  if(error) {
-    return (
-      <NoPermission/>
-    )
+  
+  if(perms.length === 0) return;
+  const permsArray = perms.map((perm) => perm.name);
+  // console.log("permsArray: ", permsArray);
+  if(!permsArray.includes("VIEW_ANALYTICS")) {
+    return <NoPermission/>
   }
+
+  // useEffect(() => {
+  //     setError("You do not have permission to view this page");}
+  //     else {setError(null)}
+  //   setShouldAnimate(true)
+  // }, [perms])
+
+  // if(error) {
+  //   return (
+  //     <NoPermission/>
+  //   )
+  // }
 
   return (
     <div className="flex flex-col min-h-screen w-full">
@@ -154,7 +154,7 @@ export default function AnalyticsDashboard() {
                       decimals={card.title === "Total Revenue" ? 2 : 0}
                       duration={2}
                       separator=","
-                      start={shouldAnimate ? 0 : card.value}
+                      start={0}
                     />
                   </div>
                   <p className="text-xs text-muted-foreground">{card.change}</p>

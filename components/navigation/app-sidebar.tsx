@@ -24,6 +24,7 @@ import {
   ListCollapse,
   ChartBar,
   ChevronsUpDown,
+  Edit,
 } from "lucide-react";
 import { OrgCombo } from "@/components/ui/org-combo";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
@@ -46,7 +47,7 @@ const menuItems = [
     icon: Home,
     label: "Home",
     href: "/dashboard/details",
-    permission: null,
+    permission: "VIEW_ADMIN_DASHBOARD",
   },
   {
     icon: Plus,
@@ -70,7 +71,14 @@ const menuItems = [
     icon: Users,
     label: "View Members",
     href: "/dashboard/users",
-    permission: null },
+    permission: null 
+  },
+  { 
+    icon: Edit,
+    label: "Edit Permissions",
+    href: "/dashboard/rbac",
+    permission: "MANAGE_PERMISSIONS" 
+  },
   {
     icon: ChartBar,
     label: "Analytics",

@@ -1,6 +1,6 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Users, ShieldCheck, Crown } from "lucide-react";
-import { StatsCounter } from "./stats-counter";
+import { StatsCounter } from "./statsCounter";
 
 interface StatsCardsProps {
   users: number;

@@ -1,5 +1,6 @@
 "use server"
 import {prisma} from "@/server/prisma"
+import { revalidatePath } from "next/cache";
 
 export  async function EditOrgDetails(organisationId: string, name: string, desc: string){
     try{
@@ -13,6 +14,8 @@ export  async function EditOrgDetails(organisationId: string, name: string, desc
             }
         })
         console.log("org updated: ", organisationId, name, desc)
+        revalidatePath('/dashboard/details');
+
         return {success: "invite regenerated successfully"}
     }
     catch(error) {
