@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -36,28 +36,29 @@ import {
   Pencil,
   Copy,
   RefreshCw,
-  CalendarCheck2,
   Trash,
 } from "lucide-react";
 import useDashboardStore from "@/hooks/useDashboardStore";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export default function OrganizationDashboard() {
-  interface OrgDetails {
-    orgDetails: {
-      id: string;
+interface OrgDetails {
+  orgDetails: {
+    id: string;
+    name: string;
+    desc: string;
+    inviteCode: string;
+    createdAt: string;
+    updatedAt: string;
+    creator: {
       name: string;
-      desc: string;
-      inviteCode: string;
-      createdAt: string;
-      updatedAt: string;
-      creator: {
-        name: string;
-      };
     };
-    users: number;
-    managers: number;
-    admins: number;
-  }
+  };
+  users: number;
+  managers: number;
+  admins: number;
+}
+
+export default async function OrganizationDashboard() {
 
   const [orgData, setOrgData] = useState<OrgDetails | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -66,22 +67,29 @@ export default function OrganizationDashboard() {
   const { toast } = useToast();
   const {organisationId} = useDashboardStore();
 
-  useEffect(() => {
-    const fetchOrgDetails = async () => {
-      if(!organisationId) {console.log("No organisation ID found");
-        return;
-      }
+
+  const organisationData = await GetOrgDetails("organisationId");
+  
+  // useEffect(() => {
+  //   const fetchOrgDetails = async () => {
+  //     if(!organisationId) {console.log("No organisation ID found");
+  //       return;
+  //     }
       
-      const res = await GetOrgDetails(organisationId);
-      setOrgData(res);
-      setEditedName(res.orgDetails.name);
-      setEditedDescription(res.orgDetails.desc);
-    };
-    fetchOrgDetails();
-  }, [organisationId]);
+  //     const res = await GetOrgDetails(organisationId);
+  //     setOrgData(res);
+  //     setEditedName(res.orgDetails.name);
+  //     setEditedDescription(res.orgDetails.desc);
+  //   };
+  //   fetchOrgDetails();
+  // }, [organisationId]);
 
   if (!orgData) {
-    return <div>Loading...</div>;
+    return <div className="flex flex-col space-y-10">
+    <Skeleton className="h-20" />
+    <Skeleton className="h-20" />
+    <Skeleton className="h-20" />
+  </div>;;
   }
 
   const totalMembers = orgData.users + orgData.managers + orgData.admins;

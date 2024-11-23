@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/navigation/app-sidebar";
-import { ThemeProvider } from "next-themes";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { SessionProvider } from "next-auth/react";
 
@@ -35,11 +35,11 @@ export default function RootLayout({
       >
         <SessionProvider>
           <main>
-            <ThemeProvider>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               {/* <SidebarProvider> */}
-                {/* <AppSidebar /> */}
-                {children}
-                <Toaster />
+              {/* <AppSidebar /> */}
+              {children}
+              <Toaster />
               {/* </SidebarProvider> */}
             </ThemeProvider>
           </main>
