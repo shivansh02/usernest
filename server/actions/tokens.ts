@@ -19,6 +19,33 @@ export const getVerificationToken = async (email: string) => {
   }
 };
 
+export const getPasswordResetToken = async (email: string) => {
+  try {
+    const token = await prisma.passwordResetToken.findFirst({
+      where: {
+        email: email,
+      },
+    });
+
+    if (token) {
+      return { token };
+    }
+  } catch (error) {
+    return null;
+  }
+}
+export const getPasswordResetTokenByToken = async (token: string) => {
+  try {
+    const passwordResetToken = await prisma.passwordResetToken.findFirst({
+      where: {
+        token: token,
+      },
+    });
+    return passwordResetToken;
+  } catch (error) {
+    return null;
+  }
+}
 export const generateVerificationToken = async (email: string) => {
   const id = crypto.randomUUID();
   const token = crypto.randomUUID();
@@ -43,6 +70,30 @@ export const generateVerificationToken = async (email: string) => {
   return verificationToken;
 };
 
+export const generatePasswordResetToken = async (email: string) => {
+  const id = crypto.randomUUID();
+  const token = crypto.randomUUID();
+  const expires = new Date(new Date().getTime() + 3600 * 1000);
+  const existingToken = await getPasswordResetToken(email);
+  if (existingToken) {
+    await prisma.passwordResetToken.delete({
+      where: {
+        id: existingToken.token.id,
+      },
+    });
+  }
+  const passwordResetToken = await prisma.passwordResetToken.create({
+    data: {
+      token: token,
+      expires: expires,
+      email: email,
+      id: id
+    },
+  });
+
+  return passwordResetToken;
+}
+
 const resend = new Resend(process.env.RESEND_KEY);
 const domain = getBaseUrl();
 
@@ -59,6 +110,17 @@ export const sendVerificationEmail = async (email: string, token: string) => {
   if (data) return data;
 };
 
+export const sendPasswordResetEmail = async (email: string, token: string) => {
+  const confirmLink = `${domain}/auth/reset-password?token=${token}`;
+  const { data, error } = await resend.emails.send({
+    from: "reset-pass@resend.dev",
+    to: email,
+    subject: "Usernest Password Reset Email",
+    html: `<p>Click to <a href='${confirmLink}'>reset your password</a></p>`,
+  });
+  if (error) console.log(error);
+  if (data) return data;
+}
 
 export const verifyToken = async (token: string) => {
   const existingToken = await prisma.verificationToken.findFirst({

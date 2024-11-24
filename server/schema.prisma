@@ -56,6 +56,13 @@ model VerificationToken {
   email   String
 }
 
+model PasswordResetToken {
+  id      String   @id @default(cuid())
+  token   String
+  expires DateTime
+  email   String
+}
+
 model Organisation {
   id             String           @id @default(cuid())
   name           String
