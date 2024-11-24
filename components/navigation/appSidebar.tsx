@@ -13,7 +13,7 @@ import Image from "next/image";
 import usernestLogo from "@/public/usernest.svg";
 import { getPerms2 } from "@/server/actions/getPermsInOrg";
 import Link from "next/link";
-import { OrgCombo } from "../ui/org-combo2";
+import { OrgCombo } from "./orgCombobox";
 import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
 import AppSidebarFooter from "./sidebarFooter";
@@ -75,30 +75,7 @@ export async function AppSidebar() {
 
   const perms = await getPerms2(orgId);
 
-  // return (
-  //   <Sidebar className="border-r bg dark text-foreground">
-  //     <SidebarHeader className="p-6">
-  //       <div className="flex space-x-2">
-  //         <Image src={usernestLogo} alt="Usernest" width={32} height={32} />
-  //         <h1 className="font-bold text-xl my-4 mx-2">usernest</h1>
-  //       </div>
-  //       {/* <h2 className="text-lg font-semibold">My App</h2> */}
-  //       {/* <p className="text-muted-foreground text-sm pl-2 pb-1">Organisation</p> */}
-  //     </SidebarHeader>
-  //     <SidebarContent className="px-4 py-2">
-  //       <SidebarMenu>
-  //         <SidebarGroupLabel>Links</SidebarGroupLabel>
-  //         <Skeleton className="h-6 mx-2 my-2" />
-  //         <Skeleton className="h-6 mx-2 my-2" />
-  //       </SidebarMenu>
-  //     </SidebarContent>
-  //     <SidebarFooter className="p-4">
-  //       <Skeleton className="h-8 mx-2 my-2" />
-  //     </SidebarFooter>
-  //   </Sidebar>
-  // );
-
-  const userPermissions = perms.map((perm) => perm.name);
+  const userPermissions = perms.map((perm: {id: string, name: string}) => perm.name);
   const filteredPermissions = menuItems.filter(
     (item) => !item.permission || userPermissions.includes(item.permission)
   );

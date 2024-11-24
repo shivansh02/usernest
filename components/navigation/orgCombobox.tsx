@@ -74,7 +74,7 @@ export function OrgCombo() {
                     "cursor-pointer",
                     session?.user.orgId === org.organisation.id
                       ? " font-semibold"
-                      : "text-black"
+                      : "text-secondary-foreground font-thin"
                   )}
                   onSelect={async (currentValue: any) => {
                     // setOrganisationId(currentValue);

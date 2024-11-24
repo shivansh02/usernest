@@ -7,11 +7,6 @@ import { QuickActionsCard } from "./_components/quickActionsCard";
 import { RBACPoliciesCard } from "./_components/rbacPoliciesCard";
 import { auth } from "@/server/auth";
 
-interface PageProps {
-  params: {
-    id: string;
-  };
-}
 
 export default async function OrganizationDashboard() {
   const session = await auth();
