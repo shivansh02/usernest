@@ -14,6 +14,7 @@ interface GetMembershipsResponse {
 export async function getMemberships(
   userId: string
 ): Promise<GetMembershipsResponse> {
+  console.log(">>>>>>>>>Getting memberships for user", userId);
   try {
     const orgs = await prisma.membership.findMany({
       where: {

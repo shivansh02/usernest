@@ -2,6 +2,8 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import FilterSection from "./_components/filterSection";
 import UsersTable from "./_components/usersTable";
 import { prisma } from "@/server/prisma";
+import { auth } from "@/server/auth";
+import NoPermission from "@/components/common/noPermission";
 
 export type User = {
   id: string;
@@ -35,6 +37,14 @@ const UserActionPage = async () => {
     name: membership.user.name!,
     role: membership.role,
   }));
+
+  const session = await auth();
+  const orgId = session?.user.orgId!;
+  const perms = session?.user.perms!;
+
+  if(!perms.includes("MANAGE_USERS")) {
+    return <NoPermission />;
+  }
 
   console.log("users:::", users);
 

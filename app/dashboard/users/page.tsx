@@ -1,10 +1,8 @@
-"use client";
-import { User, columns } from "./columns";
+import NoPermission from "@/components/common/noPermission";
+import { columns } from "./columns";
 import { DataTable } from "./dataTable";
-import { useState, useCallback, useEffect } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -12,14 +10,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
 import { GetOrgDetails } from "@/server/actions/getOrgDetails";
 
-import useDashboardStore from "@/hooks/useDashboardStore";
 import { GetUsersByOrg } from "@/server/actions/getUsersByOrg";
-import { Skeleton } from "@/components/ui/skeleton";
+import {auth} from "@/server/auth";
+import { redirect } from "next/navigation";
 
-export default function OrganizationDashboard() {
+export default async function OrganizationDashboard() {
   interface OrgDetails {
     orgDetails: {
       id: string;
@@ -37,76 +34,34 @@ export default function OrganizationDashboard() {
     admins: number;
   }
 
-  const [orgData, setOrgData] = useState<OrgDetails | null>(null);
-  const { organisationId, perms } = useDashboardStore();
-  const [loading, setLoading] = useState(true);
+  const session = await auth();
+  const orgId = session?.user.orgId!;
+  const perms = session?.user.perms!;
 
-  const [users, setusers] = useState<
-    { email: string; name: string; role: string }[]
-  >([]);
+  if(!perms.includes("VIEW_USERS")) {
+    return <NoPermission />;
+  }
 
-  // useEffect(() => {
-  //   async function fetchOrgs() {
-  //     if (organisationId) {
-  //       const users = (await GetUsersByOrg(organisationId)) as User[];
-  //       console.log(users);
-  //       setusers(users);
-  //     }
-  //   }
-  //   fetchOrgs();
-  //   setLoading(false);
-  // }, [organisationId]);
+  const users = await GetUsersByOrg(orgId);
+  const orgData = await GetOrgDetails(orgId);
 
-  useEffect(() => {
-    async function fetchData() {
-      if (!organisationId) return;
-  
-      setLoading(true);
-  
-      try {
-        const [usersData, orgDetails] = await Promise.all([
-          GetUsersByOrg(organisationId),
-          GetOrgDetails(organisationId),
-        ]);
-  
-        setusers(usersData as User[]);
-        setOrgData(orgDetails);
-      } catch (error) {
-        console.error("Error fetching data", error);
-      } finally {
-        setLoading(false); 
-      }
-    }
-  
-    fetchData();
-  }, [organisationId]);
-  
-
-  // useEffect(() => {
-  //   const fetchOrgDetails = async () => {
-  //     if (!organisationId) {
-  //       console.log("No organisation ID found");
-  //       return;
-  //     }
-
-  //     const res = await GetOrgDetails(organisationId);
-  //     setOrgData(res);
-  //   };
-  //   fetchOrgDetails();
-  // }, [organisationId]);
-
-  if (!orgData || loading) {
-    return <div className="flex flex-col space-y-10">
-      <Skeleton className="h-20" />
-      <Skeleton className="h-20" />
-      <Skeleton className="h-20" />
-    </div>;
+  if (!orgId) {
+    redirect("/dashboard/create-org");
   }
 
   const totalMembers = orgData.users + orgData.managers + orgData.admins;
 
   return (
     <div className="container mx-auto p-6">
+      {perms.map((perm) => (
+        <Badge
+          key={perm}
+          variant="secondary"
+          className="mr-2 px-4 py-2 rounded-full"
+        >
+          {perm}
+        </Badge>
+      ))}
       <Card className="mb-6">
         <CardHeader className="flex flex-row items-center gap-4">
           <Avatar className="h-20 w-20">
@@ -173,14 +128,8 @@ export default function OrganizationDashboard() {
             <CardTitle>Your Permissions</CardTitle>
           </CardHeader>
           <CardContent>
-            {/* <div className="flex items-center gap-2">
-              <ShieldCheck className="h-6 w-6 text-orange-500" />
-              <span className="text-lg font-semibold">Admin</span>
-            </div> */}
-            {/* <div className="text-xs text-muted-foreground">
-            </div> */}
             <div className="mt-4">
-              {perms.map((perm) => (
+              {/* {perms.map((perm) => (
                 <Badge
                   key={perm.id}
                   variant="secondary"
@@ -188,7 +137,7 @@ export default function OrganizationDashboard() {
                 >
                   {perm.name}
                 </Badge>
-              ))}
+              ))} */}
             </div>
           </CardContent>
         </Card>

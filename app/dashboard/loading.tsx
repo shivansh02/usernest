@@ -1,14 +1,10 @@
+import { Skeleton } from "@/components/ui/skeleton";
 const LayoutLoading = () => {
-  return (
-    <div className="loading">
-      <div className="loading__content">
-        <div className="loading__icon">
-          <i className="loading__icon__spinner" />
-        </div>
-        <div className="loading__text">Loading...</div>
-      </div>
-    </div>
-  );
+  return <div className="flex flex-col space-y-8 p-6">
+    <Skeleton className="h-20" />
+    <Skeleton className="h-20" />
+    <Skeleton className="h-40" />
+  </div>;
 };
 
 export default LayoutLoading;

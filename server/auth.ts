@@ -4,6 +4,7 @@ import { prisma } from "@/server/prisma";
 import { getUser, getAccount } from "@/server/actions/getUser";
 import authConfig from "./auth.config";
 import { getMemberships } from "./actions/getMemberships";
+import { getPermsById } from "./actions/getPermsInOrg";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -19,6 +20,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.isOAuth = token.user.isOAuth as boolean;
         session.user.image = token.user.image as string;
         session.user.orgId = token.user.orgId as string;
+        session.user.perms = token.user.perms as string[];
       }
 
       console.log("Session", session);
@@ -35,6 +37,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           isOAuth: false,
           image: null,
           orgId: "",
+          perms: [],
         };
       }
 
@@ -43,7 +46,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
 
       if (user) {
-        if (trigger === "signIn" || !token.user.orgId) {
+        if (trigger === "signIn" || !token.user.orgId || !token.user.perms) {
           if (!token.sub) return token;
 
           const existingUser = await getUser(token.sub);
@@ -64,6 +67,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             token.user.orgId = orgs.orglist[0].id;
           } else {
             token.user.orgId = "";
+          }
+          const perms = await getPermsById(token.user.orgId, existingUser.id);
+          if(perms && perms.length > 0) {
+            token.user.perms = perms;
+          } else {
+            token.user.perms = [];
           }
         }
       }

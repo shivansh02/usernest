@@ -20,16 +20,15 @@ import {
 import useDashboardStore, { Organisation } from "@/hooks/useDashboardStore";
 import { useSession } from "next-auth/react";
 import { getOrgs } from "@/server/actions/getOrgs";
+import { getPermsById } from "@/server/actions/getPermsInOrg";
 
 export function OrgCombo() {
   const [open, setOpen] = React.useState(false);
 
   const { data: session, update } = useSession();
+  const orgId = session?.user.orgId;
 
   const {
-    organisationId,
-    setOrganisationId,
-    setOrganisationName,
     fetchedOrgs,
     setFetchedOrgs,
   } = useDashboardStore();
@@ -42,6 +41,7 @@ export function OrgCombo() {
     }
     if (fetchedOrgs.length === 0) fetchOrgs();
   }, []);
+  console.log("orgId: ", orgId);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -52,9 +52,9 @@ export function OrgCombo() {
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {session?.user.orgId
+          {orgId
             ? fetchedOrgs.find(
-                (org) => org.organisation.id === session?.user.orgId
+                (org) => org.organisation.id === orgId
               )?.organisation.name
             : "Select Organisation"}
           <ChevronsUpDown className="opacity-50" />
@@ -77,28 +77,29 @@ export function OrgCombo() {
                       : "text-black"
                   )}
                   onSelect={async (currentValue: any) => {
-                    setOrganisationId(currentValue);
+                    // setOrganisationId(currentValue);
                     await update({
                       user: {
                         ...session!.user,
                         orgId: currentValue,
+                        perms: await getPermsById(currentValue, session!.user.id),
                       },
                     });
+                    // setOrganisationName(
+                    //   fetchedOrgs.find(
+                    //     (org) => org.organisation.id === currentValue
+                    //   )?.organisation.name || ""
+                    // );
+                    setOpen(false);
                     window.location.replace("/dashboard/details");
                     // setOrganisationName(fetchedOrgs.find())
-                    setOrganisationName(
-                      fetchedOrgs.find(
-                        (org) => org.organisation.id === currentValue
-                      )?.organisation.name || ""
-                    );
-                    setOpen(false);
                   }}
                 >
                   {org.organisation.name}
                   <Check
                     className={cn(
                       "ml-auto",
-                      organisationId === org.organisation.name
+                      orgId === org.organisation.name
                         ? "opacity-100"
                         : "opacity-0"
                     )}
