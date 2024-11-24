@@ -16,7 +16,7 @@ import CountUpWrapper from "./_components/countUpWrapper";
 const cardData = [
   {
     title: "Total Revenue",
-    value: 45231,
+    value: 45231.89,
     change: "+20.1% from last month",
     icon: (
       <svg

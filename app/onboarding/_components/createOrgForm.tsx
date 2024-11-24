@@ -24,7 +24,6 @@ import useDashboardStore from "@/hooks/useDashboardStore";
 export default function CreateOrgForm() {
   const { execute, isExecuting, result, status } = useAction(CreateOrg, {});
   const router = useRouter();
-  const { setOrganisationId, setOrganisationName } = useDashboardStore();
 
   async function handleCreateSubmit(values: z.infer<typeof newOrgSchema>) {
     console.log("handle joinsubmit hit");

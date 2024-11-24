@@ -49,13 +49,16 @@ import NoPermission from "@/components/common/noPermission";
 import { Role, User } from "../page";
 import TableFooter from "./tableFooter";
 import FilterSection from "./filterSection";
+import { useSession } from "next-auth/react";
 
 interface UsersTableProps {
   usersData: User[];
 }
 
 const UsersTable = ({ usersData }: UsersTableProps) => {
-  const { organisationId, organisationName, perms } = useDashboardStore();
+  const {data: session} = useSession();
+  const orgId = session?.user.orgId;
+  
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -127,11 +130,11 @@ const UsersTable = ({ usersData }: UsersTableProps) => {
             value={user.role}
             onValueChange={async (newRole: Role) => {
               console.log(`Role updated for ${user.name}:`, newRole);
-              if (organisationId) {
-                console.log(user, organisationId, newRole);
+              if (orgId) {
+                console.log(user, orgId, newRole);
                 const success = await changeRole(
                   user.id,
-                  organisationId,
+                  orgId,
                   newRole
                 );
                 console.log("success:::", success);
@@ -171,9 +174,9 @@ const UsersTable = ({ usersData }: UsersTableProps) => {
             className="h-8 w-8 p-0"
             onClick={async () => {
               console.log("delete button hit");
-              if (organisationId) {
+              if (orgId) {
                 console.log("org exists");
-                const success = await DeleteMembership(user.id, organisationId);
+                const success = await DeleteMembership(user.id, orgId);
                 // if (success) {
                 //   setusers((prevUsers) =>
                 //     prevUsers.filter((u) => u.id !== user.id)

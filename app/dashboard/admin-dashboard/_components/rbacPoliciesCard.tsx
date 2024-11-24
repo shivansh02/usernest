@@ -16,7 +16,7 @@ export async function RBACPoliciesCard() {
   const orgId = user?.orgId!;
   const managerPerms = await GetAllPerms(orgId, "MANAGER");
   console.log("managerPerms: ", managerPerms);
-  const userPerms = await GetAllPerms("cm3ionqef0001iddgkvufvs4r", "USER");
+  const userPerms = await GetAllPerms(orgId, "USER");
   return (
     <Card>
       <CardContent>

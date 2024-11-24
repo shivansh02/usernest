@@ -4,26 +4,20 @@ import RbacCard from "./_components/rbacCard";
 import { auth } from "@/server/auth";
 import NoPermission from "@/components/common/noPermission";
 
-const permissions = [
-  { id: "cm3qa0dpe0000192hclezlkhx", name: "View Users" },
-  { id: "cm3qa0u160001192hx0wf08p4", name: "Manage Users" },
-  { id: "cm3qwvbw40004192h7cvs5gnh", name: "View Analytics" },
-];
-
 export default async function PermissionManagement() {
   const session = await auth();
-  const orgId = session?.user.orgId;
+  const orgId = session?.user.orgId!;
   const perms = session?.user.perms!;
 
   if (!perms.includes("VIEW_ANALYTICS")) {
     return <NoPermission />;
   }
   const managerPerms = await GetAllPerms(
-    "cm3ionqef0001iddgkvufvs4r",
+    orgId,
     "MANAGER"
   );
   const managerPermsArray = managerPerms.map((perm) => perm.id);
-  const userPerms = await GetAllPerms("cm3ionqef0001iddgkvufvs4r", "USER");
+  const userPerms = await GetAllPerms(orgId, "USER");
   const userPermsArray = userPerms.map((perm) => perm.id);
 
   return (

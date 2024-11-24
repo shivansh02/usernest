@@ -15,9 +15,12 @@ export type User = {
 export type Role = "ADMIN" | "MANAGER" | "USER";
 
 const UserActionPage = async () => {
+  const session = await auth();
+  const orgId = session?.user.orgId;
+
   const memberships = await prisma.membership.findMany({
     where: {
-      organisationId: "cm3ionqef0001iddgkvufvs4r",
+      organisationId: orgId,
     },
     select: {
       user: {
@@ -38,8 +41,7 @@ const UserActionPage = async () => {
     role: membership.role,
   }));
 
-  const session = await auth();
-  const orgId = session?.user.orgId!;
+  
   const perms = session?.user.perms!;
 
   if(!perms.includes("MANAGE_USERS")) {
@@ -52,7 +54,7 @@ const UserActionPage = async () => {
     <div className="w-full flex-1">
       <header className="flex h-16 items-center gap-4 border-b px-6">
         <SidebarTrigger />
-        {/* <h1 className="text-xl">{organisationName}</h1> */}
+        <h1 className="text-xl">Manage Users</h1>
       </header>
       <div className="p-6">
         <h1 className="my-2 text-xl text-gray-500">Manage users</h1>

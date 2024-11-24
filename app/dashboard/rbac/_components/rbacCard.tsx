@@ -12,6 +12,7 @@ import {
 import { updateRolePermissions } from "@/server/actions/updateRolePermissions";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 const permissions = [
   { id: "cm3qa0dpe0000192hclezlkhx", name: "View Users" },
@@ -25,14 +26,17 @@ interface CardProps {
 }
 
 export default function RbacCard({ managerPerms, userPerms }: CardProps) {
+  const {data: session} = useSession();
+  const orgId = session?.user.orgId!;
+
   const { toast } = useToast();
   const handleSubmit = () => {
     toast({
       title: "Permissions Updated",
       description: "Permissions have been successfully updated",
     });
-    updateRolePermissions("organisationId", "MANAGER", managerPerms);
-    updateRolePermissions("organisationId", "USER", userPerms);
+    updateRolePermissions(orgId, "MANAGER", managerPerms);
+    updateRolePermissions(orgId, "USER", userPerms);
   };
   const [managerPermissions, setManagerPermissions] =
     useState<string[]>(managerPerms);

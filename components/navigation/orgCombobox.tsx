@@ -77,7 +77,6 @@ export function OrgCombo() {
                       : "text-secondary-foreground font-thin"
                   )}
                   onSelect={async (currentValue: any) => {
-                    // setOrganisationId(currentValue);
                     await update({
                       user: {
                         ...session!.user,
