@@ -13,7 +13,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -26,12 +25,7 @@ import {
   ChevronsUpDown,
   Edit,
 } from "lucide-react";
-import { OrgCombo } from "@/components/ui/org-combo";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { auth } from "@/server/auth";
-import { useTheme } from "next-themes";
-import { signOut } from "@/server/auth";
-import { UserAvatar } from "../auth/userAvatar";
 import Image from "next/image";
 import usernestLogo from "@/public/usernest.svg";
 import { useState, useEffect } from "react";
@@ -41,6 +35,7 @@ import useDashboardStore from "@/hooks/useDashboardStore";
 import Link from "next/link";
 import { Skeleton } from "../ui/skeleton";
 import { SignOutButton } from "./signOutButton";
+import { OrgCombo } from "../ui/org-combo2";
 
 const menuItems = [
   {
@@ -67,17 +62,17 @@ const menuItems = [
     href: "/dashboard/user-action",
     permission: "MANAGE_USERS",
   },
-  { 
+  {
     icon: Users,
     label: "View Members",
     href: "/dashboard/users",
-    permission: null 
+    permission: null,
   },
-  { 
+  {
     icon: Edit,
     label: "Edit Permissions",
     href: "/dashboard/rbac",
-    permission: "MANAGE_PERMISSIONS" 
+    permission: "MANAGE_PERMISSIONS",
   },
   {
     icon: ChartBar,
@@ -91,27 +86,26 @@ export function AppSidebar() {
   // const session = await auth();
   const { data: session } = useSession();
   const user = session?.user;
-  const { perms, setPerms, organisationId, permsOrg, setPermsOrg } =
-    useDashboardStore();
+  const { perms, setPerms, permsOrg, setPermsOrg } = useDashboardStore();
   const [loading, setLoading] = useState(false);
+
+  const orgId = session?.user.orgId!;
 
   useEffect(() => {
     async function getPerms() {
       setLoading(true);
-      if (!organisationId) return;
-      const fetchedPerms = await getPerms2(organisationId);
+      const fetchedPerms = await getPerms2(orgId);
       console.log("perms in sidebar: ", fetchedPerms);
       if (Array.isArray(fetchedPerms)) {
         setPerms(fetchedPerms);
-        setPermsOrg(organisationId);
+        setPermsOrg(orgId);
       } else {
         console.error("Failed to fetch permissions:", fetchedPerms.failure);
       }
       setLoading(false);
     }
-    if (perms.length === 0 || permsOrg == null || permsOrg != organisationId)
-      getPerms();
-  }, [organisationId]);
+    if (perms.length === 0 || permsOrg == null || permsOrg != orgId) getPerms();
+  }, [orgId]);
 
   if (loading) {
     return (
@@ -123,7 +117,6 @@ export function AppSidebar() {
           </div>
           {/* <h2 className="text-lg font-semibold">My App</h2> */}
           {/* <p className="text-muted-foreground text-sm pl-2 pb-1">Organisation</p> */}
-          <OrgCombo />
         </SidebarHeader>
         <SidebarContent className="px-4 py-2">
           <SidebarMenu>
@@ -179,7 +172,7 @@ export function AppSidebar() {
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
                   <Avatar className="size-8 border-2 border-gray-500 rounded-full">
-                    <AvatarImage src={user?.image} alt="@shadcn" />
+                    {/* <AvatarImage src={user?.image} alt="@shadcn" /> */}
                     <AvatarFallback className="flex items-center justify-center mt-1.5">
                       <User className="size-4" />
                     </AvatarFallback>

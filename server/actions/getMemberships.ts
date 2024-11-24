@@ -1,17 +1,23 @@
-'use server'
+"use server";
 import { prisma } from "@/server/prisma";
 import { auth } from "@/server/auth";
+import { $Enums } from "@prisma/client";
 
-export async function getMemberships() {
-  const session = await auth();
-  const user = session?.user;
-  console.log("user: ", user)
-  if (!user || !user.id) return { failure: "User not logged in" };
+interface GetMembershipsResponse {
+  orglist: {
+    id: string;
+    name: string;
+    role: $Enums.Role;
+  }[];
+}
 
+export async function getMemberships(
+  userId: string
+): Promise<GetMembershipsResponse> {
   try {
     const orgs = await prisma.membership.findMany({
       where: {
-        userId: user.id,
+        userId: userId,
       },
       select: {
         organisation: {
@@ -20,7 +26,7 @@ export async function getMemberships() {
             name: true,
           },
         },
-        role: true
+        role: true,
       },
     });
 
@@ -29,10 +35,10 @@ export async function getMemberships() {
       name: membership.organisation.name,
       role: membership.role,
     }));
-    return orgsList;
+    return { orglist: orgsList };
     // return orgs
   } catch (error) {
     console.log(error);
-    return error;
+    throw new Error(`Failed to fetch organisations: ${error}`);
   }
 }

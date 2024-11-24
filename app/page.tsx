@@ -10,6 +10,6 @@ export default function App() {
   // if (!session?.user) {
   //   router.push("/auth/login");
   // } else router.push("/dashboard/org-details");
-  if(session?.user) router.push("/dashboard/org-details");
+  if(session?.user) router.push("/dashboard/details");
   return <></>;
 }

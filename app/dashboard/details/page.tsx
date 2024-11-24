@@ -5,6 +5,7 @@ import { OrgDetailsCard } from "./_components/orgDetailsCard";
 import { InviteCodeCard } from "./_components/inviteCodeCard";
 import { QuickActionsCard } from "./_components/quickActionsCard";
 import { RBACPoliciesCard } from "./_components/rbacPoliciesCard";
+import { auth } from "@/server/auth";
 
 interface PageProps {
   params: {
@@ -13,7 +14,15 @@ interface PageProps {
 }
 
 export default async function OrganizationDashboard() {
-  const orgData = await GetOrgDetails("cm3ionqef0001iddgkvufvs4r");
+  const session = await auth();
+
+  const orgId = session?.user.orgId;
+
+  if (!orgId) {
+    return <div>Organization not found</div>;
+  }
+
+  const orgData = await GetOrgDetails(orgId);
 
   if (!orgData) {
     return <div>Organization not found</div>;

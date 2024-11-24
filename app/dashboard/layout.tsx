@@ -18,12 +18,11 @@
 //   );
 // }
 
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/navigation/app-sidebar"
-import { ThemeProvider } from "next-themes"
-import { Toaster } from "@/components/ui/toaster"
-import { SessionProvider } from "next-auth/react"
-
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/navigation/app-sidebar2";
+import { ThemeProvider } from "next-themes";
+import { Toaster } from "@/components/ui/toaster";
+import { SessionProvider } from "next-auth/react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -34,14 +33,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     //     {children}
     //   </main>
     // </SidebarProvider>
-          <main>
-            <ThemeProvider>
-              <SidebarProvider>
-                <AppSidebar />
-                {children}
-                <Toaster />
-              </SidebarProvider>
-            </ThemeProvider>
-          </main>
-  )
+    <main>
+      <ThemeProvider>
+        <SidebarProvider>
+          <AppSidebar />
+          {children}
+          <Toaster />
+        </SidebarProvider>
+      </ThemeProvider>
+    </main>
+  );
 }

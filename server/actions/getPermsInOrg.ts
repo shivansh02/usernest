@@ -41,10 +41,10 @@ import { auth } from "@/server/auth";
 // }
 
 export async function getPerms2(organisationId: string) {
-    const session = await auth();
+  const session = await auth();
   const user = session?.user;
   if (!user) {
-    return { failure: "User not found" };
+    throw new Error("User not found");
   }
   const permissions = await prisma.permission.findMany({
     where: {
