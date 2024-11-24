@@ -6,12 +6,18 @@ import { InviteCodeCard } from "./_components/inviteCodeCard";
 import { QuickActionsCard } from "./_components/quickActionsCard";
 import { RBACPoliciesCard } from "./_components/rbacPoliciesCard";
 import { auth } from "@/server/auth";
-
+import NoPermission from "@/components/common/noPermission";
 
 export default async function OrganizationDashboard() {
   const session = await auth();
 
   const orgId = session?.user.orgId;
+
+  const perms = session?.user.perms!;
+
+  if (!perms.includes("VIEW_ADMIN_DASHBOARD")) {
+    return <NoPermission />;
+  }
 
   if (!orgId) {
     return <div>Organization not found</div>;

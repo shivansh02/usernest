@@ -1,33 +1,22 @@
-"use client"
-import CountUp from 'react-countup'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { StackedChart } from './_components/stackedChart'
-import { GrowthChart } from './_components/growthChart'
-import { SidebarTrigger } from '@/components/ui/sidebar'
-import useDashboardStore from '@/hooks/useDashboardStore'
-import NoPermission from '@/components/common/noPermission'
-
-const data = [
-  { name: "Jan", total: 1200 },
-  { name: "Feb", total: 2100 },
-  { name: "Mar", total: 1800 },
-  { name: "Apr", total: 2400 },
-  { name: "May", total: 2800 },
-  { name: "Jun", total: 3200 },
-]
-
-const barData = [
-  { name: "Product A", sales: 400 },
-  { name: "Product B", sales: 300 },
-  { name: "Product C", sales: 500 },
-  { name: "Product D", sales: 280 },
-  { name: "Product E", sales: 450 },
-]
+import CountUp from "react-countup";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { StackedChart } from "./_components/stackedChart";
+import { GrowthChart } from "./_components/growthChart";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import NoPermission from "@/components/common/noPermission";
+import { auth } from "@/server/auth";
+import CountUpWrapper from "./_components/countUpWrapper";
 
 const cardData = [
   {
     title: "Total Revenue",
-    value: 45231.89,
+    value: 45231,
     change: "+20.1% from last month",
     icon: (
       <svg
@@ -104,36 +93,22 @@ const cardData = [
       </svg>
     ),
   },
-]
+];
 
-export default function AnalyticsDashboard() {
-  // const [error, setError] = useState<string | null>(null);
-  const {perms, organisationId } = useDashboardStore();
-  
-  if(perms.length === 0) return;
-  const permsArray = perms.map((perm) => perm.name);
-  // console.log("permsArray: ", permsArray);
-  if(!permsArray.includes("VIEW_ANALYTICS")) {
-    return <NoPermission/>
+export default async function AnalyticsDashboard() {
+  const session = await auth();
+  const orgId = session?.user.orgId;
+  const perms = session?.user.perms!;
+
+  if (!perms.includes("VIEW_ANALYTICS")) {
+    return <NoPermission />;
   }
-
-  // useEffect(() => {
-  //     setError("You do not have permission to view this page");}
-  //     else {setError(null)}
-  //   setShouldAnimate(true)
-  // }, [perms])
-
-  // if(error) {
-  //   return (
-  //     <NoPermission/>
-  //   )
-  // }
 
   return (
     <div className="flex flex-col min-h-screen w-full">
       <header className="bg-background border-b">
         <div className="flex space-x-4 container mx-auto px-4 py-4">
-          <SidebarTrigger/>
+          <SidebarTrigger />
           <h1 className="text-xl">Analytics</h1>
         </div>
       </header>
@@ -143,18 +118,17 @@ export default function AnalyticsDashboard() {
             {cardData.map((card, index) => (
               <Card key={index}>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
+                  <CardTitle className="text-sm font-medium">
+                    {card.title}
+                  </CardTitle>
                   {card.icon}
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">
                     {card.title === "Total Revenue" ? "$" : ""}
-                    <CountUp
-                      end={card.value}
-                      decimals={card.title === "Total Revenue" ? 2 : 0}
-                      duration={2}
-                      separator=","
-                      start={0}
+                    <CountUpWrapper
+                      value={card.value}
+                      decimals={0}
                     />
                   </div>
                   <p className="text-xs text-muted-foreground">{card.change}</p>
@@ -163,11 +137,11 @@ export default function AnalyticsDashboard() {
             ))}
           </div>
           <div className="grid gap-6 md:grid-cols-2 mt-6">
-          <StackedChart/>
-          <GrowthChart/>
+            <StackedChart />
+            <GrowthChart />
           </div>
         </div>
       </main>
     </div>
-  )
+  );
 }
