@@ -4,7 +4,7 @@ import { auth } from "@/server/auth";
 
 export async function getPermsById(organisationId: string, userId: string) {
   console.log(
-    ">>>>>>>>>>Getting permissions for user",
+    "Getting permissions for user",
     userId,
     "in organisation",
     organisationId

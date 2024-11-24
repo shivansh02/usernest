@@ -59,7 +59,7 @@ export function QuickActionsCard({ organizationId }: QuickActionsCardProps) {
           </Link>
         </Button>
         <Button variant="outline" asChild>
-          <Link href={`/dashboard/user-action`} className="flex gap-4">
+          <Link href={`/dashboard/manage-users`} className="flex gap-4">
             <Users className="h-4 w-4" />
             Manage Members
           </Link>

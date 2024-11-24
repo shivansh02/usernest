@@ -91,7 +91,7 @@ export function OrgCombo() {
                     //   )?.organisation.name || ""
                     // );
                     setOpen(false);
-                    window.location.replace("/dashboard/details");
+                    window.location.replace("/dashboard/admin-dashboard");
                     // setOrganisationName(fetchedOrgs.find())
                   }}
                 >

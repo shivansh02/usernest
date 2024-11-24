@@ -1,20 +1,21 @@
 "use server";
 import { prisma } from "@/server/prisma";
 import { auth } from "@/server/auth";
-import { $Enums } from "@prisma/client";
+
+export type Role = "ADMIN" | "MANAGER" | "USER";
 
 interface GetMembershipsResponse {
   orglist: {
     id: string;
     name: string;
-    role: $Enums.Role;
+    role: Role;
   }[];
 }
 
 export async function getMemberships(
   userId: string
 ): Promise<GetMembershipsResponse> {
-  console.log(">>>>>>>>>Getting memberships for user", userId);
+  console.log("Getting memberships for user", userId);
   try {
     const orgs = await prisma.membership.findMany({
       where: {

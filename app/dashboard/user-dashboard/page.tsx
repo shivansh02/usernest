@@ -13,7 +13,7 @@ import {
 import { GetOrgDetails } from "@/server/actions/getOrgDetails";
 
 import { GetUsersByOrg } from "@/server/actions/getUsersByOrg";
-import {auth} from "@/server/auth";
+import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
 
 export default async function OrganizationDashboard() {
@@ -38,7 +38,7 @@ export default async function OrganizationDashboard() {
   const orgId = session?.user.orgId!;
   const perms = session?.user.perms!;
 
-  if(!perms.includes("VIEW_USERS")) {
+  if (!perms.includes("VIEW_USER_DASHBOARD")) {
     return <NoPermission />;
   }
 
@@ -53,15 +53,6 @@ export default async function OrganizationDashboard() {
 
   return (
     <div className="container mx-auto p-6">
-      {perms.map((perm) => (
-        <Badge
-          key={perm}
-          variant="secondary"
-          className="mr-2 px-4 py-2 rounded-full"
-        >
-          {perm}
-        </Badge>
-      ))}
       <Card className="mb-6">
         <CardHeader className="flex flex-row items-center gap-4">
           <Avatar className="h-20 w-20">
@@ -129,15 +120,15 @@ export default async function OrganizationDashboard() {
           </CardHeader>
           <CardContent>
             <div className="mt-4">
-              {/* {perms.map((perm) => (
+              {perms.map((perm) => (
                 <Badge
-                  key={perm.id}
+                  key={perm}
                   variant="secondary"
-                  className="mr-2 px-4 py-2 rounded-full"
+                  className="mr-2 mt-1 px-4 py-2 rounded-full"
                 >
-                  {perm.name}
+                  {perm}
                 </Badge>
-              ))} */}
+              ))}
             </div>
           </CardContent>
         </Card>

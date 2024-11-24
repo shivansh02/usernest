@@ -14,7 +14,7 @@ export  async function EditOrgDetails(organisationId: string, name: string, desc
             }
         })
         console.log("org updated: ", organisationId, name, desc)
-        revalidatePath('/dashboard/details');
+        revalidatePath('/dashboard/admin-dashboard');
 
         return {success: "invite regenerated successfully"}
     }

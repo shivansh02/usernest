@@ -20,7 +20,7 @@ export default async function PermissionManagement() {
     <div className="flex-1 flex flex-col min-h-screen bg-muted">
       <header className="flex h-16 items-center gap-4 border-b px-6">
         <SidebarTrigger />
-        <h1 className="text-xl">{"organisationName"}</h1>
+        {/* <h1 className="text-xl">{"organisationName"}</h1> */}
       </header>
       <RbacCard managerPerms={managerPermsArray} userPerms={userPermsArray} />
     </div>

@@ -30,7 +30,7 @@ export default function CreateOrgForm() {
     console.log("handle joinsubmit hit");
     execute(values);
     // set organisation id and name if successful
-    router.push("/dashboard/org-details");
+    router.push("/dashboard/admin-dashboard");
   }
 
   const form = useForm<z.infer<typeof newOrgSchema>>({

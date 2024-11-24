@@ -13,7 +13,7 @@ export async function DeleteMembership(userId: string, organisationId: string) {
       },
     });
     console.log("deleted membership")
-    revalidatePath('/dashboard/user-action');
+    revalidatePath('/dashboard/manage-users');
     return { success: "membership deleted successfully" };
   } catch (error) {
     console.log(error)

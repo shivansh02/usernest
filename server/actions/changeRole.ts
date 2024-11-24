@@ -21,7 +21,7 @@ export async function changeRole(
         role: role as Role,
       },
     });
-    revalidatePath("/dashboard/user-action");
+    revalidatePath("/dashboard/manage-users");
     return { success: "Role changed successfully" };
   } catch (error) {
     return { failure: "Role change failed" };

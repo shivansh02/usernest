@@ -8,7 +8,7 @@ import {
   SidebarMenuItem,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import { Home, Plus, Users, ListCollapse, ChartBar, Edit } from "lucide-react";
+import { Home, Plus, Users, ChartBar, Edit, UserRoundPen } from "lucide-react";
 import Image from "next/image";
 import usernestLogo from "@/public/usernest.svg";
 import { getPerms2 } from "@/server/actions/getPermsInOrg";
@@ -21,32 +21,26 @@ import AppSidebarFooter from "./sidebarFooter";
 const menuItems = [
   {
     icon: Home,
-    label: "Home",
-    href: "/dashboard/details",
+    label: "Admin Dashboard",
+    href: "/dashboard/admin-dashboard",
     permission: "VIEW_ADMIN_DASHBOARD",
+  },
+  {
+    icon: Users,
+    label: "User Dashboard",
+    href: "/dashboard/user-dashboard",
+    permission: "VIEW_USER_DASHBOARD",
+  },
+  {
+    icon: UserRoundPen,
+    label: "Manage Members",
+    href: "/dashboard/manage-users",
+    permission: "MANAGE_USERS",
   },
   {
     icon: Plus,
     label: "Create or Join Org",
     href: "/dashboard/create-org",
-    permission: null,
-  },
-  {
-    icon: ListCollapse,
-    label: "Org Details",
-    href: "/dashboard/org-details",
-    permission: "VIEW_ORG_DETAILS",
-  },
-  {
-    icon: Users,
-    label: "Manage Members",
-    href: "/dashboard/user-action",
-    permission: "MANAGE_USERS",
-  },
-  {
-    icon: Users,
-    label: "View Members",
-    href: "/dashboard/users",
     permission: null,
   },
   {
@@ -75,7 +69,9 @@ export async function AppSidebar() {
 
   const perms = await getPerms2(orgId);
 
-  const userPermissions = perms.map((perm: {id: string, name: string}) => perm.name);
+  const userPermissions = perms.map(
+    (perm: { id: string; name: string }) => perm.name
+  );
   const filteredPermissions = menuItems.filter(
     (item) => !item.permission || userPermissions.includes(item.permission)
   );
@@ -107,7 +103,6 @@ export async function AppSidebar() {
       <SidebarFooter className="p-4">
         <SidebarMenu>
           <SidebarMenuItem>
-            {/* <UserAvatar user={user} /> */}
             <AppSidebarFooter user={user} />
           </SidebarMenuItem>
         </SidebarMenu>

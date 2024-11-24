@@ -32,10 +32,9 @@ const AppSidebarFooter = ({ user }: AppSidebarFooterProps) => {
           size="lg"
           className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
         >
-          <Avatar className="size-8 border-2 border-gray-500 rounded-full">
-            {/* <AvatarImage src={user?.image} alt="@shadcn" /> */}
+          <Avatar className="size-8 border-2  rounded-full">
             <AvatarFallback className="flex items-center justify-center mt-1.5">
-              <UserIcon className="size-4" />
+              <UserIcon className="size-8" />
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col items-start gap-0.5 leading-none">
