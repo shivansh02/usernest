@@ -7,6 +7,6 @@ export default function App() {
   const router = useRouter();
   const { data: session } = useSession()
 
-  if(session?.user) router.push("/dashboard/admin-dashboard");
+  // if(session?.user) router.push("/dashboard");
   return <></>;
 }

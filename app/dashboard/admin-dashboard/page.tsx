@@ -8,7 +8,7 @@ import { RBACPoliciesCard } from "./_components/rbacPoliciesCard";
 import { auth } from "@/server/auth";
 import NoPermission from "@/components/common/noPermission";
 
-export default async function OrganizationDashboard() {
+export default async function AdminDashboard() {
   const session = await auth();
 
   const orgId = session?.user.orgId;

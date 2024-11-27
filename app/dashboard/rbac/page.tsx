@@ -4,12 +4,13 @@ import RbacCard from "./_components/rbacCard";
 import { auth } from "@/server/auth";
 import NoPermission from "@/components/common/noPermission";
 
+
 export default async function PermissionManagement() {
   const session = await auth();
   const orgId = session?.user.orgId!;
   const perms = session?.user.perms!;
 
-  if (!perms.includes("VIEW_ANALYTICS")) {
+  if (!perms.includes("EDIT_PERMS")) {
     return <NoPermission />;
   }
   const managerPerms = await GetAllPerms(

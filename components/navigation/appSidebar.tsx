@@ -47,7 +47,7 @@ const menuItems = [
     icon: Edit,
     label: "Edit Permissions",
     href: "/dashboard/rbac",
-    permission: "MANAGE_PERMISSIONS",
+    permission: "EDIT_PERMS",
   },
   {
     icon: ChartBar,

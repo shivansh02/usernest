@@ -84,14 +84,9 @@ export function OrgCombo() {
                         perms: await getPermsById(currentValue, session!.user.id),
                       },
                     });
-                    // setOrganisationName(
-                    //   fetchedOrgs.find(
-                    //     (org) => org.organisation.id === currentValue
-                    //   )?.organisation.name || ""
-                    // );
+                    
                     setOpen(false);
-                    window.location.replace("/dashboard/admin-dashboard");
-                    // setOrganisationName(fetchedOrgs.find())
+                    window.location.replace("/dashboard/");
                   }}
                 >
                   {org.organisation.name}

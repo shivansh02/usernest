@@ -20,16 +20,29 @@ import { newOrgSchema } from "@/types/newOrgSchema";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
 import useDashboardStore from "@/hooks/useDashboardStore";
+import { useToast } from "@/hooks/use-toast";
 
 export default function CreateOrgForm() {
   const { execute, isExecuting, result, status } = useAction(CreateOrg, {});
   const router = useRouter();
+  const { toast } = useToast();
+
 
   async function handleCreateSubmit(values: z.infer<typeof newOrgSchema>) {
     console.log("handle joinsubmit hit");
     execute(values);
+    //reload window
+    // window.location.reload();
     // set organisation id and name if successful
-    router.push("/dashboard/admin-dashboard");
+    toast({
+      title: "Organisation created successfully",
+      description: "You can view organisation by switching to it in the sidebar.",
+    });
+    setTimeout(() => {
+      // router.push("/dashboard/");
+      window.location.reload();
+    }, 2000);
+    // router.push("/dashboard/");
   }
 
   const form = useForm<z.infer<typeof newOrgSchema>>({

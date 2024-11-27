@@ -23,6 +23,7 @@ export async function RBACPoliciesCard() {
           <div className="flex flex-col justify-center space-y-4 pt-6">
             <div>
               <h3 className="text-md">Manager Permissions</h3>
+              {managerPerms.length === 0 && <p className="text-sm text-gray-400">No permissions found</p>}
               {managerPerms.map((perm: {id: string, name: string}) => (
                 <Badge
                   key={perm.id}
@@ -34,6 +35,7 @@ export async function RBACPoliciesCard() {
             </div>
             <div>
               <h3 className="text-md">User Permissions</h3>
+              {userPerms.length === 0 && <p className="text-sm text-gray-400">No permissions found</p>}
               {userPerms.map((perm: {id: string, name: string}) => (
                 <Badge
                   key={perm.id}

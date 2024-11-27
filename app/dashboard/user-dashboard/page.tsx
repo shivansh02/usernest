@@ -16,7 +16,7 @@ import { GetUsersByOrg } from "@/server/actions/getUsersByOrg";
 import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
 
-export default async function OrganizationDashboard() {
+export default async function UserDashboard() {
   interface OrgDetails {
     orgDetails: {
       id: string;
