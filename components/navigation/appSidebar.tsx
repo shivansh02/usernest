@@ -22,16 +22,16 @@ import AppSidebarFooter from "./sidebarFooter";
 const menuItems = [
   {
     icon: Home,
-    label: "Admin Dashboard",
-    href: "/dashboard/admin-dashboard",
-    permission: "VIEW_ADMIN_DASHBOARD",
-  },
-  {
-    icon: Users,
-    label: "User Dashboard",
-    href: "/dashboard/user-dashboard",
+    label: "Dashboard",
+    href: "/dashboard",
     permission: "VIEW_USER_DASHBOARD",
   },
+  // {
+  //   icon: Users,
+  //   label: "User Dashboard",
+  //   href: "/dashboard",
+  //   permission: "VIEW_USER_DASHBOARD",
+  // },
   {
     icon: UserRoundPen,
     label: "Manage Members",

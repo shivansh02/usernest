@@ -41,12 +41,13 @@ import TableFooter from "./tableFooter";
 
 interface UsersTableProps {
   usersData: User[];
+  myRole: Role;
 }
 
-const UsersTable = ({ usersData }: UsersTableProps) => {
-  const {data: session} = useSession();
+const UsersTable = ({ usersData, myRole }: UsersTableProps) => {
+  const { data: session } = useSession();
   const orgId = session?.user.orgId;
-  
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -54,6 +55,28 @@ const UsersTable = ({ usersData }: UsersTableProps) => {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+
+  const checkDisabled = (role: string) => {
+    if (
+      (myRole === "USER" && role === "ADMIN") ||
+      (myRole === "USER" && role === "MANAGER") ||
+      (myRole === "MANAGER" && role === "ADMIN")
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  // return roles i can change into, based on my role
+  const getRoles = (role: Role) => {
+    if (role === "ADMIN") {
+      return ["MANAGER", "USER", "ADMIN"];
+    } else if (role === "MANAGER") {
+      return ["USER", "MANAGER"];
+    } else {
+      return ["USER"];
+    }
+  };
 
   const columns: ColumnDef<User>[] = [
     {
@@ -115,24 +138,14 @@ const UsersTable = ({ usersData }: UsersTableProps) => {
         const user = row.original;
         return (
           <Select
+            disabled={user.id === session?.user.id || checkDisabled(user.role)}
             value={user.role}
             onValueChange={async (newRole: Role) => {
               console.log(`Role updated for ${user.name}:`, newRole);
               if (orgId) {
                 console.log(user, orgId, newRole);
-                const success = await changeRole(
-                  user.id,
-                  orgId,
-                  newRole
-                );
+                const success = await changeRole(user.id, orgId, newRole);
                 console.log("success:::", success);
-                // if (success) {
-                //   setusers((prevUsers) =>
-                //     prevUsers.map((u) =>
-                //       u.id === user.id ? { ...u, role: newRole } : u
-                //     )
-                //   );
-                // }
               } else {
                 console.log("No organisation selected!!");
               }
@@ -142,9 +155,17 @@ const UsersTable = ({ usersData }: UsersTableProps) => {
               <SelectValue placeholder="Select a role">{user.role}</SelectValue>
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="ADMIN">Admin</SelectItem>
+              {getRoles(myRole).map((role) => (
+                <SelectItem
+                  key={role}
+                  value={role}
+                >
+                  {role}
+                </SelectItem>
+              ))}
+              {/* <SelectItem value="ADMIN">Admin</SelectItem>
               <SelectItem value="MANAGER">Manager</SelectItem>
-              <SelectItem value="USER">User</SelectItem>
+              <SelectItem value="USER">User</SelectItem> */}
             </SelectContent>
           </Select>
         );
@@ -158,6 +179,7 @@ const UsersTable = ({ usersData }: UsersTableProps) => {
 
         return (
           <Button
+            disabled={user.id === session?.user.id}
             variant="ghost"
             className="h-8 w-8 p-0"
             onClick={async () => {
@@ -165,11 +187,6 @@ const UsersTable = ({ usersData }: UsersTableProps) => {
               if (orgId) {
                 console.log("org exists");
                 const success = await DeleteMembership(user.id, orgId);
-                // if (success) {
-                //   setusers((prevUsers) =>
-                //     prevUsers.filter((u) => u.id !== user.id)
-                //   );
-                // }
               }
             }}
           >

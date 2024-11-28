@@ -3,6 +3,7 @@ import FilterSection from "./_components/filterSection";
 import UsersTable from "./_components/usersTable";
 import { prisma } from "@/server/prisma";
 import { auth } from "@/server/auth";
+import {getMyRole } from "@/server/actions/getMyRole";
 import NoPermission from "@/components/common/noPermission";
 
 export type User = {
@@ -17,6 +18,7 @@ export type Role = "ADMIN" | "MANAGER" | "USER";
 const UserActionPage = async () => {
   const session = await auth();
   const orgId = session?.user.orgId;
+  const myRole = await getMyRole(session?.user.id!, orgId!);
 
   const memberships = await prisma.membership.findMany({
     where: {
@@ -58,7 +60,7 @@ const UserActionPage = async () => {
       </header>
       <div className="p-6">
         <h1 className="my-2 text-xl text-gray-500">Manage users</h1>
-        <UsersTable usersData={users} />
+        <UsersTable usersData={users} myRole={myRole!}/>
       </div>
     </div>
   );

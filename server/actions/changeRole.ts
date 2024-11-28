@@ -10,7 +10,22 @@ export async function changeRole(
   role: string
 ) {
   try {
-    const user = await prisma.membership.update({
+    const membership = await prisma.membership.findUnique({
+      where: {
+        userId_organisationId: {
+          userId: userId,
+          organisationId: organisationId,
+        },
+      },
+      include: {
+        user: true,
+        organisation: true,
+      },
+    });
+    if(membership?.user.id == membership?.organisation.creatorId) {
+      return { failure: "Cannot change role of owner" };
+    }
+    const updatedUser = await prisma.membership.update({
       where: {
         userId_organisationId: {
           userId: userId,

@@ -1,9 +1,24 @@
-"use server"
+"use server";
 import { prisma } from "@/server/prisma";
 import { revalidatePath } from "next/cache";
 
 export async function DeleteMembership(userId: string, organisationId: string) {
   try {
+    const membership = await prisma.membership.findUnique({
+      where: {
+        userId_organisationId: {
+          userId: userId,
+          organisationId: organisationId,
+        },
+      },
+      include: {
+        user: true,
+        organisation: true,
+      },
+    });
+    if (membership?.user.id == membership?.organisation.creatorId) {
+      return { failure: "Cannot kick organisation owner" };
+    }
     await prisma.membership.delete({
       where: {
         userId_organisationId: {
@@ -12,11 +27,11 @@ export async function DeleteMembership(userId: string, organisationId: string) {
         },
       },
     });
-    console.log("deleted membership")
-    revalidatePath('/dashboard/manage-users');
+    console.log("deleted membership");
+    revalidatePath("/dashboard/manage-users");
     return { success: "membership deleted successfully" };
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return { failure: "failed to delete membership" };
   }
 }

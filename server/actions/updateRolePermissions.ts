@@ -9,6 +9,7 @@ export async function updateRolePermissions(
   role: Role,
   permissions: string[]
 ) {
+
   // Delete all existing permissions for the role
   try {
     await prisma.rolePermission.deleteMany({
