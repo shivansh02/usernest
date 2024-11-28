@@ -1,7 +1,5 @@
 "use client";
 
-import * as React from "react";
-import { useEffect, useState } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -14,16 +12,18 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, Trash } from "lucide-react";
+import { ArrowUpDown, Trash } from "lucide-react";
+import * as React from "react";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -32,24 +32,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { GetUsersByOrg } from "@/server/actions/getUsersByOrg";
-import useDashboardStore from "@/hooks/useDashboardStore";
 import { changeRole } from "@/server/actions/changeRole";
-import { Checkbox } from "@/components/ui/checkbox";
 import { DeleteMembership } from "@/server/actions/deleteMembership";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import NoPermission from "@/components/common/noPermission";
-import { Role, User } from "../page";
-import TableFooter from "./tableFooter";
-import FilterSection from "./filterSection";
 import { useSession } from "next-auth/react";
+import { Role, User } from "../page";
+import FilterSection from "./filterSection";
+import TableFooter from "./tableFooter";
 
 interface UsersTableProps {
   usersData: User[];

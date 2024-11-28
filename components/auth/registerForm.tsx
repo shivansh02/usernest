@@ -26,7 +26,7 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function RegisterForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  const {execute, isExecuting, status, result} = useAction(EmailRegister, {})
+  const {execute, isExecuting, result} = useAction(EmailRegister, {})
 
   async function  onSubmit(values: z.infer<typeof RegisterSchema>) {
     console.log(values);
@@ -108,13 +108,13 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
         type="button"
         disabled={isLoading}
       >
-        {/* {isLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Icons.gitHub className="mr-2 h-4 w-4" />
-        )}{" "} */}
         GitHub
       </Button>
+      {result.data && (
+        <p style={{ color: result.data.success ? "green" : "red" }}>
+          {result.data.success ? result.data.message : result.data.error}
+        </p>
+      )}
     </div>
   );
 }

@@ -1,12 +1,10 @@
 "use server";
 import { LoginSchema } from "@/types/loginSchema";
 import { actionClient } from "@/lib/safe-action";
-import { prisma } from "@/server/prisma";
 import { signIn } from "@/server/auth";
 import { AuthError } from "next-auth";
-import { isRedirectError } from "next/dist/client/components/redirect";
-
-import bcrypt from "bcrypt";
+import { checkOnboarding } from "@/server/actions/checkOnboarding";
+import { redirect } from "next/navigation";
 
 export const EmailSignIn = actionClient
   .schema(LoginSchema)
@@ -15,22 +13,28 @@ export const EmailSignIn = actionClient
       await signIn("credentials", {
         email,
         password,
-        redirect: true,
-        redirectTo: "/dashboard/",
+        redirect: false,
       });
 
-      return { success: "User Signed In!" };
+      // Check if user needs onboarding
+      const isOnboarded = await checkOnboarding(email);
+
+      if (!isOnboarded) {
+        redirect("/authonboarding");
+      }
+
+      redirect("/dashboard/");
     } catch (error) {
       if (error instanceof AuthError) {
         switch (error.type) {
           case "CredentialsSignin":
-            return { error: "Email or Password Incorrect" };
+            return { success: false, error: "Email or Password Incorrect" };
           case "AccessDenied":
-            return { error: error.message };
+            return { success: false, error: error.message };
           case "OAuthSignInError":
-            return { error: error.message };
+            return { success: false, error: error.message };
           default:
-            return { error: "Something went wrong" };
+            return { success: false, error: "Something went wrong" };
         }
       }
       throw error;

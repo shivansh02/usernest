@@ -2,7 +2,6 @@
 import * as React from "react";
 import { useEffect } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { getMemberships } from "@/server/actions/getMemberships";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,16 +21,31 @@ import { useSession } from "next-auth/react";
 import { getOrgs } from "@/server/actions/getOrgs";
 import { getPermsById } from "@/server/actions/getPermsInOrg";
 
-export function OrgCombo() {
+interface OrgComboProps {
+  session: Session;
+}
+
+interface Session {
+  expires: string,
+  user: {
+    // optional email
+    email?: string | null | undefined;
+    id: string;
+    image?: string | null | undefined;
+    isOAuth: boolean;
+    name: string;
+    orgId: string;
+    perms: string[];
+  };
+}
+
+export function OrgCombo(userSession : any) {
   const [open, setOpen] = React.useState(false);
 
-  const { data: session, update } = useSession();
-  const orgId = session?.user.orgId;
-
-  const {
-    fetchedOrgs,
-    setFetchedOrgs,
-  } = useDashboardStore();
+  const { update } = useSession();
+  console.log("userSession", userSession)
+  // console.log(session)
+  const { fetchedOrgs, setFetchedOrgs } = useDashboardStore();
 
   useEffect(() => {
     async function fetchOrgs() {
@@ -41,7 +55,7 @@ export function OrgCombo() {
     }
     if (fetchedOrgs.length === 0) fetchOrgs();
   }, []);
-  console.log("orgId: ", orgId);
+  // console.log("orgId: ", userSession?.user.orgId);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -52,10 +66,9 @@ export function OrgCombo() {
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {orgId
-            ? fetchedOrgs.find(
-                (org) => org.organisation.id === orgId
-              )?.organisation.name
+          {userSession?.session.user.orgId
+            ? fetchedOrgs.find((org) => org.organisation.id === userSession?.session.user.orgId)
+                ?.organisation.name
             : "Select Organisation"}
           <ChevronsUpDown className="opacity-50" />
         </Button>
@@ -72,19 +85,22 @@ export function OrgCombo() {
                   value={org.organisation.id}
                   className={cn(
                     "cursor-pointer",
-                    session?.user.orgId === org.organisation.id
+                    userSession?.session.user.orgId === org.organisation.id
                       ? " font-semibold"
                       : "text-secondary-foreground font-thin"
                   )}
                   onSelect={async (currentValue: any) => {
                     await update({
                       user: {
-                        ...session!.user,
+                        ...userSession!.session.user,
                         orgId: currentValue,
-                        perms: await getPermsById(currentValue, session!.user.id),
+                        perms: await getPermsById(
+                          currentValue,
+                          userSession!.session.user.id
+                        ),
                       },
                     });
-                    
+
                     setOpen(false);
                     window.location.replace("/dashboard/");
                   }}
@@ -93,7 +109,7 @@ export function OrgCombo() {
                   <Check
                     className={cn(
                       "ml-auto",
-                      orgId === org.organisation.name
+                      userSession?.session.user.orgId === org.organisation.name
                         ? "opacity-100"
                         : "opacity-0"
                     )}

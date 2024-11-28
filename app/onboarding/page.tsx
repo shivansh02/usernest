@@ -2,62 +2,19 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useForm } from "react-hook-form";
-import JoinOrgForm from "./_components/joinOrgForm";
 import CreateOrgForm from "./_components/createOrgForm";
+import JoinOrgForm from "./_components/joinOrgForm";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
 
-import { CreateOrg } from "@/server/actions/createOrg";
-import { useAction } from "next-safe-action/hooks";
-import { newOrgSchema, orgInvite } from "@/types/newOrgSchema";
-import * as z from "zod";
 
-import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 import loginArt from "@/public/loginArt2.png";
 
 export default function OnboardingPage() {
-  // const [orgName, setOrgName] = useState("");
-  // const [orgDescription, setOrgDescription] = useState("");
-  // const [inviteCode, setInviteCode] = useState("");
 
-  // const { execute, isExecuting } = useAction(CreateOrg, {});
-
-  // async function handleCreateSubmit(values: z.infer<typeof newOrgSchema>) {
-  //   console.log("handle createsubmit hit");
-  //   execute(values);
-  // }
-
-  // const handleJoinSubmit = (e: React.FormEvent) => {};
-
-  // const form = useForm<z.infer<typeof newOrgSchema>>({
-  //   resolver: zodResolver(newOrgSchema),
-  //   defaultValues: {
-  //     name: "",
-  //     desc: "",
-  //   },
-  // });
-  // const joinForm = useForm<z.infer<typeof orgInvite>>({
-  //   resolver: zodResolver(orgInvite),
-  //   defaultValues: {
-  //     code: "",
-  //   },
-  // });
 
   return (
     <>

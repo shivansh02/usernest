@@ -34,6 +34,7 @@ export const JoinOrg = actionClient
         },
       });
       console.log(newMember);
+      return { success: "Organisation joined successfully." };
 
     } catch (error) {
       console.log(error);

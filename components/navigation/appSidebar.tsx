@@ -1,3 +1,4 @@
+
 import {
   Sidebar,
   SidebarContent,
@@ -83,7 +84,7 @@ export async function AppSidebar() {
           <Image src={usernestLogo} alt="Usernest" width={32} height={32} />
           <h1 className="font-bold text-xl my-4 mx-2">usernest</h1>
         </div>
-        <OrgCombo />
+        <OrgCombo session={session}/>
       </SidebarHeader>
       <SidebarContent className="px-4 py-2">
         <SidebarMenu>
@@ -110,3 +111,4 @@ export async function AppSidebar() {
     </Sidebar>
   );
 }
+

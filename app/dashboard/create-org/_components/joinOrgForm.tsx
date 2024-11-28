@@ -17,21 +17,26 @@ import { JoinOrg } from "@/server/actions/joinOrg";
 import { orgInvite } from "@/types/newOrgSchema";
 import { useAction } from "next-safe-action/hooks";
 import * as z from "zod";
-import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
-
+import { useToast } from "@/hooks/use-toast";
 
 export default function JoinOrgForm() {
-  const { execute, result, hasSucceeded } = useAction(JoinOrg, {});
-  const router = useRouter();
+  const { toast } = useToast();
+  const { execute, result,  } = useAction(JoinOrg, {});
 
   async function handleJoinSubmit(values: z.infer<typeof orgInvite>) {
     console.log("handle joinsubmit hit");
     execute(values);
-    // console.log("result", result);
-    router.push("/dashboard");
-    
-}
+    console.log("result", result);
+    toast({
+      title: "Organisation joined successfully",
+      description:
+        "You can view organisation by switching to it in the sidebar.",
+    });
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+  }
 
   const form = useForm<z.infer<typeof orgInvite>>({
     resolver: zodResolver(orgInvite),
@@ -54,10 +59,7 @@ export default function JoinOrgForm() {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input
-                    placeholder="Enter Invite Code"
-                    {...field}
-                  />
+                  <Input placeholder="Enter Invite Code" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -1,15 +1,14 @@
 "use client";
-import { useSearchParams } from "next/navigation";
 import { verifyToken } from "@/server/actions/tokens";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
 
-import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import loginArt from "@/public/loginArt2.png";
 
 export default function TokenVerificationPage() {

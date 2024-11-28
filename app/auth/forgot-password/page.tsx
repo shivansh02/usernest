@@ -1,14 +1,12 @@
 "use client";
-import { Metadata } from "next"
-import Image from "next/image"
-import Link from "next/link"
+import Image from "next/image";
+import Link from "next/link";
 
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
-import loginArt from "@/public/loginArt2.png"
-import { RegisterForm } from "@/components/auth/registerForm"
-import { useEffect, useState } from "react"
-import { ForgotPasswordForm } from "@/components/auth/forgotPasswordForm"
+import { ForgotPasswordForm } from "@/components/auth/forgotPasswordForm";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import loginArt from "@/public/loginArt2.png";
+import { useEffect, useState } from "react";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");

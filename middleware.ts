@@ -1,6 +1,7 @@
 
 import { auth } from "@/server/auth";
 import { NextResponse } from "next/server";
+import {checkOnboarding} from "@/server/actions/checkOnboarding";
 
 export default auth((req) => {
   const { pathname } = req.nextUrl;

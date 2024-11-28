@@ -30,7 +30,13 @@ export default function CreateOrgForm() {
   async function handleCreateSubmit(values: z.infer<typeof newOrgSchema>) {
     console.log("handle joinsubmit hit");
     execute(values);
-    router.push("/dashboard");
+    toast({
+      title: "Organisation created successfully",
+      description: "You can view organisation by switching to it in the sidebar.",
+    });
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
   }
 
   const form = useForm<z.infer<typeof newOrgSchema>>({

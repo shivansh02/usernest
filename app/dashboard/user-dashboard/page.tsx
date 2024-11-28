@@ -1,6 +1,4 @@
 import NoPermission from "@/components/common/noPermission";
-import { columns } from "./columns";
-import { DataTable } from "./dataTable";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -17,23 +15,7 @@ import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
 
 export default async function UserDashboard() {
-  interface OrgDetails {
-    orgDetails: {
-      id: string;
-      name: string;
-      desc: string;
-      inviteCode: string;
-      createdAt: string;
-      updatedAt: string;
-      creator: {
-        name: string;
-      };
-    };
-    users: number;
-    managers: number;
-    admins: number;
-  }
-
+  
   const session = await auth();
   const orgId = session?.user.orgId!;
   const perms = session?.user.perms!;
@@ -138,7 +120,7 @@ export default async function UserDashboard() {
           <CardTitle>Users</CardTitle>
         </CardHeader>
         <CardContent>
-          <DataTable columns={columns} data={users} />
+          {/* <DataTable columns={columns} data={users} /> */}
         </CardContent>
       </Card>
     </div>

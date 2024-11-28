@@ -18,18 +18,17 @@ import {
 } from "@/components/ui/form";
 import { LoginSchema } from "@/types/loginSchema";
 import { useAction } from "next-safe-action/hooks";
-import {EmailSignIn} from "@/server/actions/emailSignin"
+import { EmailSignIn } from "@/server/actions/emailSignin";
 import Link from "next/link";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-
 export function LoginForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  const {execute, isExecuting, status, result} = useAction(EmailSignIn, {})
+  const { execute, isExecuting, result } = useAction(EmailSignIn, {});
 
-  async function  onSubmit(values: z.infer<typeof LoginSchema>) {
+  async function onSubmit(values: z.infer<typeof LoginSchema>) {
     console.log(values);
     execute(values);
   }
@@ -72,14 +71,17 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
           />
           <div className="flex justify-end">
             <Button variant="link" type="button">
-                <Link
+              <Link
                 href={`/auth/forgot-password?email=${form.getValues().email}`}
               >
                 Forgot Password?
               </Link>
             </Button>
           </div>
-          <Button type="submit" className={cn('w-full', isExecuting ? 'animate-pulse' : '')}>
+          <Button
+            type="submit"
+            className={cn("w-full", isExecuting ? "animate-pulse" : "")}
+          >
             Sign in with Email
           </Button>
         </form>
@@ -105,13 +107,14 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
         type="button"
         disabled={isLoading}
       >
-        {/* {isLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Icons.gitHub className="mr-2 h-4 w-4" />
-        )}{" "} */}
+
         GitHub
       </Button>
+      {result.data && (
+         <p className="text-red-500 text-center">
+         {result.data.error}
+       </p>
+      )}
     </div>
   );
 }

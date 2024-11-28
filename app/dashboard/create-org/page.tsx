@@ -1,10 +1,6 @@
-import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import JoinOrgForm from "@/app/onboarding/_components/joinOrgForm";
-import CreateOrgForm from "@/app/onboarding/_components/createOrgForm";
-
-import { CreateOrg } from "@/server/actions/createOrg";
-import { useAction } from "next-safe-action/hooks";
+import JoinOrgForm from "./_components/joinOrgForm";
+import CreateOrgForm from "./_components/createOrgForm";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -20,14 +16,6 @@ export default function OnboardingPage() {
         <SidebarTrigger />
         <div className="flex items-center justify-between w-full">
           <h1 className="font-semibold">{}</h1>
-
-          {/* <Toggle
-            onChange={() => {
-              setTheme(theme === "light" ? "dark" : "light");
-            }}
-          >
-            <MoonIcon />
-          </Toggle> */}
         </div>
       </header>
       <div className="w-full flex-grow flex flex-col justify-center items-center pb-8">

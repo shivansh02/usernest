@@ -1,10 +1,9 @@
-import { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
 import { LoginForm } from "@/components/auth/loginForm"
+import { buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import loginArt from "@/public/loginArt2.png"
 
 export default function AuthenticationPage() {

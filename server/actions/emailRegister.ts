@@ -1,42 +1,46 @@
 "use server";
 import { RegisterSchema } from "@/types/registerSchema";
 import { actionClient } from "@/lib/safe-action";
-import { prisma } from "@/server/prisma"
-import bcrypt from 'bcryptjs'
+import { prisma } from "@/server/prisma";
+import bcrypt from "bcryptjs";
 import { generateVerificationToken, sendVerificationEmail } from "./tokens";
 
 export const EmailRegister = actionClient
-.schema(RegisterSchema)
-.action(async ({parsedInput: {email, name, password} }) => {
-    const user = await prisma.user.findUnique({
-        where: {
-            email: email
+  .schema(RegisterSchema)
+  .action(async ({ parsedInput: { email, name, password } }) => {
+    try {
+      // check if the user already exists
+      const user = await prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (user) {
+        if (!user.emailVerified) {
+          // send verification email for unverified user
+          const verificationToken = await generateVerificationToken(email);
+          await sendVerificationEmail(email, verificationToken.token);
+
+          return { success: true, message: "Verification email sent to your registered email." };
         }
-    })
-    if(user) {
-        if(!user.emailVerified) {
-            const verificationToken = await generateVerificationToken(email)
-            await sendVerificationEmail(email, verificationToken.token)
+        return { success: false, error: "User already exists and is verified. Try logging-in instead." };
+      }
 
-            return {success: "Verification email sent"}
-        }
-        return {failure: "User already exists"}
-    }
+      const hashedPassword = await bcrypt.hash(password, 10);
 
-    const hashedP = await bcrypt.hash(password, 10);
-
-    // register new user
-    await prisma.user.create({
+      await prisma.user.create({
         data: {
-            email: email,
-            password: hashedP,
-            name: name
-        }
-    })
-    
-    console.log({email, name, password})
-    const verificationToken = await generateVerificationToken(email)
-    await sendVerificationEmail(email, verificationToken.token)
+          email,
+          password: hashedPassword,
+          name,
+        },
+      });
 
-    return {success: "Verification email sent"}
-});
+      const verificationToken = await generateVerificationToken(email);
+      await sendVerificationEmail(email, verificationToken.token);
+
+      return { success: true, message: "Registration successful. Verification email sent." };
+    } catch (error) {
+      console.error("Error in EmailRegister action:", error);
+      return { success: false, error: "An unexpected error occurred. Please try again later." };
+    }
+  });

@@ -2,19 +2,13 @@
 
 "use client";
 
-import * as React from "react";
+import { useAction } from "next-safe-action/hooks";
 import Image from "next/image";
 import Link from "next/link";
+import * as React from "react";
 import { z } from "zod";
-import { useAction } from "next-safe-action/hooks";
 
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -23,10 +17,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import loginArt from "@/public/loginArt2.png";
 import { PasswordReset } from "@/server/actions/passwordReset";
 import { ResetPassSchema } from "@/types/forgotPassSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { redirect } from "next/navigation";
+import { useForm } from "react-hook-form";
 
 
 type FormData = z.infer<typeof ResetPassSchema>;
