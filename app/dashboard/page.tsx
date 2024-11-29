@@ -1,6 +1,7 @@
-import dynamic from "next/dynamic";
-import { auth } from "@/server/auth";
 import NoPermission from "@/components/common/noPermission";
+import { Card, CardContent } from "@/components/ui/card";
+import { auth } from "@/server/auth";
+import dynamic from "next/dynamic";
 
 const AdminDashboard = dynamic(() => import("@/app/dashboard/admin-dashboard/page"));
 const UserDashboard = dynamic(() => import("@/app/dashboard/user-dashboard/page"));
@@ -9,8 +10,14 @@ export default async function DashboardPage() {
   const session = await auth();
   const perms = session?.user.perms!;
 
-  if (!session) {
-    return <div>You need to log in to access this page.</div>;
+  if(!session?.user.orgId) {
+    return <div className="flex items-center justify-center min-h-screen w-full">
+      <Card className="p-8">
+        <CardContent>
+        Select an organisation in sidebar to view this page.
+          </CardContent>
+      </Card>
+    </div>;
   }
 
   if (!perms.includes("VIEW_ADMIN_DASHBOARD") && !perms.includes("VIEW_USER_DASHBOARD")) {

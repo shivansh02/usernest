@@ -22,7 +22,6 @@ import { PasswordReset } from "@/server/actions/passwordReset";
 import { ResetPassSchema } from "@/types/forgotPassSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useEffect } from "react";
-import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 

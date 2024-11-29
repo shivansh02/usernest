@@ -15,7 +15,7 @@ export default async function AdminDashboard() {
 
   const perms = session?.user.perms!;
 
-  if (!perms.includes("VIEW_ADMIN_DASHBOARD")) {
+  if (perms && !perms.includes("VIEW_ADMIN_DASHBOARD")) {
     return <NoPermission />;
   }
 

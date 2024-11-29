@@ -2,7 +2,8 @@
 import { verifyToken } from "@/server/actions/tokens";
 import { Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import {useState } from "react";
+import { Suspense } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -12,8 +13,10 @@ import { cn } from "@/lib/utils";
 import loginArt from "@/public/loginArt2.png";
 
 export default function TokenVerificationPage() {
+  const [token, setToken] = useState<string | null>(null);
   const Router = useRouter();
-  const token = useSearchParams().get("token");
+  // const token = useSearchParams().get("token");
+  
   const [status, setStatus] = useState<string>("verifying");
   if (!token) {
     return <p>No verification token found.</p>;
@@ -34,6 +37,8 @@ export default function TokenVerificationPage() {
       console.log(status);
     }
   };
+  const urlParams = new URLSearchParams(window.location.search);
+  setToken(urlParams.get("token"));
   
   verify();
 

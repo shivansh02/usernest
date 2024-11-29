@@ -3,6 +3,7 @@ import { auth } from "@/server/auth";
 import { actionClient } from "@/lib/safe-action";
 import { prisma } from "@/server/prisma";
 import { newOrgSchema } from "@/types/newOrgSchema";
+import { Role } from "@prisma/client";
 
 export const CreateOrg = actionClient
   .schema(newOrgSchema)
@@ -44,9 +45,9 @@ export const CreateOrg = actionClient
       const allPermissions = await prisma.permission.findMany();
 
       // Map permissions to RolePermission entries for the ADMIN role
-      const adminPermissions = allPermissions.map((permission:any) => ({
+      const adminPermissions = allPermissions.map((permission) => ({
         organisationId: newOrg.id,
-        role: "ADMIN",
+        role: Role.ADMIN,
         permissionId: permission.id,
       }));
 
