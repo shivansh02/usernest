@@ -9,13 +9,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { GetOrgDetails } from "@/server/actions/getOrgDetails";
+import { prisma } from "@/server/prisma";
 
-import { GetUsersByOrg } from "@/server/actions/getUsersByOrg";
 import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
+import UsersList from "./usersList";
 
 export default async function UserDashboard() {
-  
   const session = await auth();
   const orgId = session?.user.orgId!;
   const perms = session?.user.perms!;
@@ -24,7 +24,28 @@ export default async function UserDashboard() {
     return <NoPermission />;
   }
 
-  const users = await GetUsersByOrg(orgId);
+  const memberships = await prisma.membership.findMany({
+    where: {
+      organisationId: orgId,
+    },
+    select: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      role: true,
+    },
+  });
+
+  const users = memberships.map((membership) => ({
+    id: membership.user.id,
+    email: membership.user.email,
+    name: membership.user.name!,
+    role: membership.role,
+  }));
   const orgData = await GetOrgDetails(orgId);
 
   if (!orgId) {
@@ -117,10 +138,10 @@ export default async function UserDashboard() {
       </div>
       <Card className="mt-6">
         <CardHeader>
-          <CardTitle>Users</CardTitle>
+          <CardTitle className="pt-2">Users in this Organisation</CardTitle>
         </CardHeader>
         <CardContent>
-          {/* <DataTable columns={columns} data={users} /> */}
+          <UsersList usersData={users} />
         </CardContent>
       </Card>
     </div>

@@ -24,17 +24,14 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   email: string;
 }
 
-
 export function ForgotPasswordForm({ className, email }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  console.log(email);
+  const { execute, isExecuting, result } = useAction(ForgotPassword, {});
 
-  const {execute, isExecuting, status, result} = useAction(ForgotPassword, {})
-
-  async function  onSubmit(values: z.infer<typeof ForgotPassSchema>) {
+  async function onSubmit(values: z.infer<typeof ForgotPassSchema>) {
     console.log(values);
     execute(values);
+    console.log(result);
   }
 
   const form = useForm<z.infer<typeof ForgotPassSchema>>({
@@ -45,7 +42,7 @@ export function ForgotPasswordForm({ className, email }: UserAuthFormProps) {
   });
 
   return (
-    <div className={cn("grid gap-6", className)}>
+    <div className={cn("grid gap-2", className)}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
           <FormField
@@ -60,11 +57,21 @@ export function ForgotPasswordForm({ className, email }: UserAuthFormProps) {
               </FormItem>
             )}
           />
-          <Button type="submit" className={cn('w-full', isExecuting ? 'animate-pulse' : '')}>
+          <Button
+            type="submit"
+            className={cn("w-full", isExecuting ? "animate-pulse" : "")}
+          >
             Send Password Reset Email
           </Button>
         </form>
       </Form>
+      <div className="text-sm text-center">
+      {result.data && (
+        <p style={{ color: result.data.success ? "green" : "red" }}>
+          {result.data.success ? result.data.success : result.data.failure}
+        </p>
+      )}
+      </div>
     </div>
   );
 }

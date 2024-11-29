@@ -35,16 +35,22 @@ import {
 import { changeRole } from "@/server/actions/changeRole";
 import { DeleteMembership } from "@/server/actions/deleteMembership";
 import { useSession } from "next-auth/react";
-import { Role, User } from "../page";
-import FilterSection from "./filterSection";
 import TableFooter from "@/components/common/tableFooter";
+
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  role: Role;
+};
+
+export type Role = "ADMIN" | "MANAGER" | "USER";
 
 interface UsersTableProps {
   usersData: User[];
-  myRole: Role;
 }
 
-const UsersTable = ({ usersData, myRole }: UsersTableProps) => {
+const UsersList = ({ usersData }: UsersTableProps) => {
   const { data: session } = useSession();
   const orgId = session?.user.orgId;
 
@@ -55,29 +61,7 @@ const UsersTable = ({ usersData, myRole }: UsersTableProps) => {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
 
-  const checkDisabled = (role: string) => {
-    if (
-      (myRole === "USER" && role === "ADMIN") ||
-      (myRole === "USER" && role === "MANAGER") ||
-      (myRole === "MANAGER" && role === "ADMIN")
-    ) {
-      return true;
-    }
-    return false;
-  };
-
-  const getRoles = (role: Role) => {
-    if (role === "ADMIN") {
-      return ["MANAGER", "USER", "ADMIN"];
-    } else if (role === "MANAGER") {
-      return ["USER", "MANAGER"];
-    } else {
-      return ["USER"];
-    }
-  };
-
   const columns: ColumnDef<User>[] = [
-    
     {
       accessorKey: "name",
       header: ({ column }) => {
@@ -114,61 +98,11 @@ const UsersTable = ({ usersData, myRole }: UsersTableProps) => {
       cell: ({ row }) => {
         const user = row.original;
         return (
-          <Select
-            disabled={user.id === session?.user.id || checkDisabled(user.role)}
-            value={user.role}
-            onValueChange={async (newRole: Role) => {
-              console.log(`Role updated for ${user.name}:`, newRole);
-              if (orgId) {
-                console.log(user, orgId, newRole);
-                const success = await changeRole(user.id, orgId, newRole);
-                console.log("success:::", success);
-              } else {
-                console.log("No organisation selected!!");
-              }
-            }}
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Select a role">{user.role}</SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              {getRoles(myRole).map((role) => (
-                <SelectItem
-                  key={role}
-                  value={role}
-                >
-                  {role}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        );
+          user.role
+        )
       },
     },
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => {
-        const user = row.original;
-
-        return (
-          <Button
-            disabled={user.id === session?.user.id}
-            variant="ghost"
-            className="h-8 w-8 p-0"
-            onClick={async () => {
-              console.log("delete button hit");
-              if (orgId) {
-                console.log("org exists");
-                const success = await DeleteMembership(user.id, orgId);
-              }
-            }}
-          >
-            <Trash />
-          </Button>
-        );
-      },
-    },
+    
   ];
 
   const table = useReactTable({
@@ -190,7 +124,6 @@ const UsersTable = ({ usersData, myRole }: UsersTableProps) => {
 
   return (
     <>
-      <FilterSection table={table} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -246,4 +179,4 @@ const UsersTable = ({ usersData, myRole }: UsersTableProps) => {
   );
 };
 
-export default UsersTable;
+export default UsersList;

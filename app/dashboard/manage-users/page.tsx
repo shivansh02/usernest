@@ -1,5 +1,4 @@
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import FilterSection from "./_components/filterSection";
 import UsersTable from "./_components/usersTable";
 import { prisma } from "@/server/prisma";
 import { auth } from "@/server/auth";
@@ -50,7 +49,6 @@ const UserActionPage = async () => {
     return <NoPermission />;
   }
 
-  console.log("users:::", users);
 
   return (
     <div className="w-full flex-1">

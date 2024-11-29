@@ -100,7 +100,7 @@ const domain = getBaseUrl();
 export const sendVerificationEmail = async (email: string, token: string) => {
   const confirmLink = `${domain}/auth/verification-token?token=${token}`;
   const { data, error } = await resend.emails.send({
-    from: "onboarding@resend.dev",
+    from: 'Verification <usernest@shivansh.space>',
     to: email,
     subject: "Usernest Verification Email",
     html: `<p>Click to <a href='${confirmLink}'>confirm your email</a></p>`,
@@ -113,13 +113,14 @@ export const sendVerificationEmail = async (email: string, token: string) => {
 export const sendPasswordResetEmail = async (email: string, token: string) => {
   const confirmLink = `${domain}/auth/reset-password?token=${token}`;
   const { data, error } = await resend.emails.send({
-    from: "reset-pass@resend.dev",
+    from: 'Verification <usernest@shivansh.space>',
     to: email,
     subject: "Usernest Password Reset Email",
     html: `<p>Click to <a href='${confirmLink}'>reset your password</a></p>`,
   });
+  if(error) return { success: false, error: "Error sending reset email" };
   if (error) console.log(error);
-  if (data) return data;
+  return { success: true, message: "Verification email sent to your registered email." };
 }
 
 export const verifyToken = async (token: string) => {
@@ -146,4 +147,5 @@ export const verifyToken = async (token: string) => {
   });
 
   return { success: true, message: "Token verified successfully" };
+
 };

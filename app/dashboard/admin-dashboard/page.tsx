@@ -20,13 +20,13 @@ export default async function AdminDashboard() {
   }
 
   if (!orgId) {
-    return <div>Organization not found</div>;
+    return <div className="text-gray-300 text-lg mx-auto mt-10">Select an organisation from the sidebar!</div>;
   }
 
   const orgData = await GetOrgDetails(orgId);
 
   if (!orgData) {
-    return <div>Organization not found</div>;
+    return <div className="text-gray-300 text-lg mx-auto mt-10">Select an organisation from the sidebar!</div>;
   }
 
   const totalMembers = orgData.users + orgData.managers + orgData.admins;

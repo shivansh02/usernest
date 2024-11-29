@@ -20,7 +20,7 @@ export const EmailSignIn = actionClient
       const isOnboarded = await checkOnboarding(email);
 
       if (!isOnboarded) {
-        redirect("/authonboarding");
+        redirect("/onboarding");
       }
 
       redirect("/dashboard/");

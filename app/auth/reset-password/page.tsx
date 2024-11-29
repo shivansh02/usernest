@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useAction } from "next-safe-action/hooks";
@@ -23,16 +21,19 @@ import loginArt from "@/public/loginArt2.png";
 import { PasswordReset } from "@/server/actions/passwordReset";
 import { ResetPassSchema } from "@/types/forgotPassSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState, useEffect } from "react";
 import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
-
+import { useRouter } from "next/navigation";
 
 type FormData = z.infer<typeof ResetPassSchema>;
 
 export default function ResetPasswordPage() {
-  const [token, setToken] = React.useState("");
+  const [token, setToken] = useState("");
+  const router = useRouter();
+  const { execute, isExecuting, result, hasSucceeded } = useAction(PasswordReset, {});
 
-  React.useEffect(() => {
+  useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const tokenParam = urlParams.get("token");
     if (tokenParam) {
@@ -40,7 +41,13 @@ export default function ResetPasswordPage() {
     }
   }, []);
 
-  const { execute, isExecuting, status, result } = useAction(PasswordReset, {});
+  useEffect(() => {
+    if (hasSucceeded) {
+      router.push("/auth/login");
+    }
+  }, [hasSucceeded, router]);
+  
+
 
   const form = useForm<FormData>({
     resolver: zodResolver(ResetPassSchema),
@@ -52,8 +59,11 @@ export default function ResetPasswordPage() {
 
   const onSubmit = async (data: FormData) => {
     execute({ ...data, token });
-    if ( result.data?.success ) {
-      redirect("/auth/login");
+    console.log(result);
+    if (hasSucceeded) {
+      setTimeout(() => {
+        router.push("/auth/login");
+      }, 2000);
     }
   };
 
@@ -71,9 +81,14 @@ export default function ResetPasswordPage() {
         </Link>
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
           <div className="absolute inset-0 bg-zinc-900">
-            <Image src={loginArt} alt="Authentication" layout="fill" objectFit="cover" />
+            <Image
+              src={loginArt}
+              alt="Authentication"
+              layout="fill"
+              objectFit="cover"
+            />
           </div>
-          
+
           <div className="relative z-20 flex items-center text-lg font-medium">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -92,7 +107,8 @@ export default function ResetPasswordPage() {
           <div className="relative z-20 mt-auto">
             <blockquote className="space-y-2">
               <p className="text-lg">
-                &ldquo;Hands down the best user management software in the segment, 10x-ed our speed.&rdquo;
+                &ldquo;Hands down the best user management software in the
+                segment, 10x-ed our speed.&rdquo;
               </p>
               <footer className="text-sm">Someone</footer>
             </blockquote>
@@ -109,7 +125,10 @@ export default function ResetPasswordPage() {
               </p>
             </div>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-4"
+              >
                 <FormField
                   control={form.control}
                   name="password"
@@ -132,12 +151,12 @@ export default function ResetPasswordPage() {
                       <FormControl>
                         <Input type="password" {...field} />
                       </FormControl>
-                      <FormMessage/>
+                      <FormMessage />
                     </FormItem>
                   )}
-                />   
-                <Button 
-                  className={cn("w-full", isExecuting ? "animate-pulse" : "")} 
+                />
+                <Button
+                  className={cn("w-full", isExecuting ? "animate-pulse" : "")}
                   type="submit"
                 >
                   Reset Password

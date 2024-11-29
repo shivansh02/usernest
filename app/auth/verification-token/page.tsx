@@ -18,20 +18,24 @@ export default function TokenVerificationPage() {
   if (!token) {
     return <p>No verification token found.</p>;
   }
-  useEffect(() => {
-    const verify = async () => {
-      const data = await verifyToken(token);
-      if (data.success) {
-        setStatus("verified");
-        setTimeout(() => {
-          Router.push("/auth/login");
-        }, 2000);
-      } else {
-        setStatus("error");
-      }
-    };
-    verify();
-  }, [token]);
+
+  const verify = async () => {
+    const data = await verifyToken(token);
+    if (data.success) {
+      setStatus("verified");
+      console.log(status);
+      console.log(data);
+      setTimeout(() => {
+        Router.push("/auth/login");
+      }, 2000);
+    } else if (data.success === false) {
+      setStatus("error");
+      console.log(data);
+      console.log(status);
+    }
+  };
+  
+  verify();
 
   return (
     <>

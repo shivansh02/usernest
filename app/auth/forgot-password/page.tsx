@@ -17,27 +17,13 @@ export default function ForgotPasswordPage() {
     if (email) {
       setEmail(email);
     }
+    else {
+      setEmail("yourmail@email.com");
+    }
   }, []);
-
 
   return (
     <>
-      {/* <div className="md:hidden">
-        <Image
-          src={loginArt}
-          width={1280}
-          height={843}
-          alt="Authentication"
-          className="block dark:hidden"
-        />
-        <Image
-          src={loginArt}
-          width={1280}
-          height={843}
-          alt="Authentication"
-          className="hidden dark:block"
-        />
-      </div> */}
       <div className="container relative grid h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0 px-4">
         <Link
           href="/auth/login"

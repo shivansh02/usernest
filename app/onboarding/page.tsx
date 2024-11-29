@@ -5,29 +5,26 @@ import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CreateOrgForm from "./_components/createOrgForm";
 import JoinOrgForm from "./_components/joinOrgForm";
+import { signOut } from "next-auth/react";
+import { Button } from "@/components/ui/button";
 
-
-
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 import loginArt from "@/public/loginArt2.png";
 
 export default function OnboardingPage() {
-
-
   return (
     <>
       <div className="container relative grid h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0 px-4">
-        <Link
-          href="/auth/logout"
-          className={cn(
-            buttonVariants({ variant: "ghost" }),
-            "absolute right-4 top-4 md:right-8 md:top-8"
-          )}
+        <Button
+          onClick={async () => {
+            await signOut();
+          }}
+          variant={"ghost"}
+          className="absolute right-4 top-4 md:right-8 md:top-8"
         >
-          Log out
-        </Link>
+          Sign Out
+        </Button>
+
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
           <div className="absolute inset-0 bg-zinc-900">
             <Image
@@ -80,7 +77,7 @@ export default function OnboardingPage() {
                 <TabsTrigger value="join">Join organisation</TabsTrigger>
               </TabsList>
               <TabsContent value="create">
-                <CreateOrgForm/>
+                <CreateOrgForm />
               </TabsContent>
               <TabsContent value="join">
                 <JoinOrgForm />
