@@ -20,9 +20,15 @@ export const EmailRegister = actionClient
           const verificationToken = await generateVerificationToken(email);
           await sendVerificationEmail(email, verificationToken.token);
 
-          return { success: true, message: "Verification email sent to your registered email." };
+          return {
+            success: true,
+            message: "Verification email sent to your registered email.",
+          };
         }
-        return { success: false, error: "User already exists and is verified. Try logging-in instead." };
+        return {
+          success: false,
+          error: "User already exists and is verified. Try logging-in instead.",
+        };
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -38,9 +44,15 @@ export const EmailRegister = actionClient
       const verificationToken = await generateVerificationToken(email);
       await sendVerificationEmail(email, verificationToken.token);
 
-      return { success: true, message: "Registration successful. Verification email sent." };
+      return {
+        success: true,
+        message: "Registration successful. Verification email sent.",
+      };
     } catch (error) {
       console.error("Error in EmailRegister action:", error);
-      return { success: false, error: "An unexpected error occurred. Please try again later." };
+      return {
+        success: false,
+        error: "An unexpected error occurred. Please try again later.",
+      };
     }
   });

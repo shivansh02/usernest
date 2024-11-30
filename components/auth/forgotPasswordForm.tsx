@@ -18,20 +18,17 @@ import {
 } from "@/components/ui/form";
 import { useAction } from "next-safe-action/hooks";
 import { ForgotPassSchema } from "@/types/forgotPassSchema";
-import { ForgotPassword } from "@/server/actions/forgotPassword";
+import { ForgotPassword } from "@/server/actions/auth/forgotPassword";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   email: string;
 }
 
 export function ForgotPasswordForm({ className, email }: UserAuthFormProps) {
-
   const { execute, isExecuting, result } = useAction(ForgotPassword, {});
 
   async function onSubmit(values: z.infer<typeof ForgotPassSchema>) {
-    console.log(values);
     execute(values);
-    console.log(result);
   }
 
   const form = useForm<z.infer<typeof ForgotPassSchema>>({
@@ -66,11 +63,11 @@ export function ForgotPasswordForm({ className, email }: UserAuthFormProps) {
         </form>
       </Form>
       <div className="text-sm text-center">
-      {result.data && (
-        <p style={{ color: result.data.success ? "green" : "red" }}>
-          {result.data.success ? result.data.success : result.data.failure}
-        </p>
-      )}
+        {result.data && (
+          <p style={{ color: result.data.success ? "green" : "red" }}>
+            {result.data.success ? result.data.success : result.data.failure}
+          </p>
+        )}
       </div>
     </div>
   );

@@ -18,18 +18,16 @@ import {
 } from "@/components/ui/form";
 import { RegisterSchema } from "@/types/registerSchema";
 import { useAction } from "next-safe-action/hooks";
-import {EmailRegister} from "@/server/actions/emailRegister"
+import { EmailRegister } from "@/server/actions/auth/emailRegister";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
-
 
 export function RegisterForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  const {execute, isExecuting, result} = useAction(EmailRegister, {})
+  const { execute, isExecuting, result } = useAction(EmailRegister, {});
 
-  async function  onSubmit(values: z.infer<typeof RegisterSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof RegisterSchema>) {
     execute(values);
   }
 
@@ -38,7 +36,7 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
     defaultValues: {
       email: "",
       password: "",
-      name: ""
+      name: "",
     },
   });
 
@@ -58,13 +56,13 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
               </FormItem>
             )}
           />
-           <FormField
+          <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input placeholder="Full Name" {...field}  />
+                  <Input placeholder="Full Name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -82,7 +80,10 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
               </FormItem>
             )}
           />
-          <Button type="submit" className={cn('w-full', isExecuting ? 'animate-pulse' : '')}>
+          <Button
+            type="submit"
+            className={cn("w-full", isExecuting ? "animate-pulse" : "")}
+          >
             Register with Email
           </Button>
         </form>

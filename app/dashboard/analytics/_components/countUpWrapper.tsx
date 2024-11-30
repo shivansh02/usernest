@@ -7,7 +7,10 @@ interface CountUpWrapperProps {
   decimals: number;
 }
 
-export default function CountUpWrapper({ value, decimals }: CountUpWrapperProps) {
+export default function CountUpWrapper({
+  value,
+  decimals,
+}: CountUpWrapperProps) {
   return (
     <CountUp
       end={value}

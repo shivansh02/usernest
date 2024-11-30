@@ -1,4 +1,3 @@
-
 import {
   Sidebar,
   SidebarContent,
@@ -12,12 +11,13 @@ import {
 import { Home, Plus, Users, ChartBar, Edit, UserRoundPen } from "lucide-react";
 import Image from "next/image";
 import usernestLogo from "@/public/usernest.svg";
-import { getPerms2 } from "@/server/actions/getPermsInOrg";
+import { getPerms } from "@/server/actions/membership/getPermsInOrg";
 import Link from "next/link";
 import { OrgCombo } from "./orgCombobox";
 import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
 import AppSidebarFooter from "./sidebarFooter";
+import { getOrgs } from "@/server/actions/orgs/getOrgs";
 
 const menuItems = [
   {
@@ -26,12 +26,6 @@ const menuItems = [
     href: "/dashboard",
     permission: "VIEW_USER_DASHBOARD",
   },
-  // {
-  //   icon: Users,
-  //   label: "User Dashboard",
-  //   href: "/dashboard",
-  //   permission: "VIEW_USER_DASHBOARD",
-  // },
   {
     icon: UserRoundPen,
     label: "Manage Members",
@@ -58,6 +52,16 @@ const menuItems = [
   },
 ];
 
+export interface Organisation {
+  role: string;
+  organisation: {
+    id: string;
+    name: string;
+    inviteCode: string | null;
+    desc: string;
+  };
+}
+
 export async function AppSidebar() {
   const session = await auth();
 
@@ -67,14 +71,16 @@ export async function AppSidebar() {
 
   const user = session.user;
   const orgId = session.user.orgId;
+  const orgs = (await getOrgs()) as Organisation[];
 
-  const perms = await getPerms2(orgId);
+
+  const perms = await getPerms(orgId);
 
   const userPermissions = perms.map(
-    (perm: { id: string; name: string }) => perm.name
+    (perm: { id: string; name: string }) => perm.name,
   );
   const filteredPermissions = menuItems.filter(
-    (item) => !item.permission || userPermissions.includes(item.permission)
+    (item) => !item.permission || userPermissions.includes(item.permission),
   );
 
   return (
@@ -84,7 +90,7 @@ export async function AppSidebar() {
           <Image src={usernestLogo} alt="Usernest" width={32} height={32} />
           <h1 className="font-bold text-xl my-4 mx-2">usernest</h1>
         </div>
-        <OrgCombo session={session}/>
+        <OrgCombo userSession={session} orgs={orgs} />
       </SidebarHeader>
       <SidebarContent className="px-4 py-2">
         <SidebarMenu>
@@ -111,4 +117,3 @@ export async function AppSidebar() {
     </Sidebar>
   );
 }
-

@@ -1,4 +1,4 @@
-import { GetOrgDetails } from "@/server/actions/getOrgDetails";
+import { GetOrgDetails } from "@/server/actions/orgs/getOrgDetails";
 import { OrgHeader } from "./_components/orgHeader";
 import { StatsCards } from "./_components/statsCard";
 import { OrgDetailsCard } from "./_components/orgDetailsCard";
@@ -20,13 +20,21 @@ export default async function AdminDashboard() {
   }
 
   if (!orgId) {
-    return <div className="text-gray-300 text-lg mx-auto mt-10">Select an organisation from the sidebar!</div>;
+    return (
+      <div className="text-gray-300 text-lg mx-auto mt-10">
+        Select an organisation from the sidebar!
+      </div>
+    );
   }
 
   const orgData = await GetOrgDetails(orgId);
 
   if (!orgData) {
-    return <div className="text-gray-300 text-lg mx-auto mt-10">Select an organisation from the sidebar!</div>;
+    return (
+      <div className="text-gray-300 text-lg mx-auto mt-10">
+        Select an organisation from the sidebar!
+      </div>
+    );
   }
 
   const totalMembers = orgData.users + orgData.managers + orgData.admins;

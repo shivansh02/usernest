@@ -1,7 +1,7 @@
-'use server'
+"use server";
 import { prisma } from "@/server/prisma";
 
-export async function getMyRole (userId: string, organisationId: string) {
+export async function getMyRole(userId: string, organisationId: string) {
   const membership = await prisma.membership.findUnique({
     where: {
       userId_organisationId: {

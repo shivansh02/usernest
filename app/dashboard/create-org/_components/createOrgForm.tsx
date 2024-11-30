@@ -15,28 +15,29 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { useToast } from "@/hooks/use-toast";
-import { CreateOrg } from "@/server/actions/createOrg";
+import { CreateOrg } from "@/server/actions/orgs/createOrg";
 import { newOrgSchema } from "@/types/newOrgSchema";
 import { useAction } from "next-safe-action/hooks";
-import { useRouter } from "next/navigation";
 import * as z from "zod";
+import { cn } from "@/lib/utils";
+import { useEffect } from "react";
 
 export default function CreateOrgForm() {
-  const { execute, isExecuting, result, status } = useAction(CreateOrg, {});
-  const router = useRouter();
+  const { execute, isExecuting, hasSucceeded } = useAction(CreateOrg, {});
   const { toast } = useToast();
-
+  useEffect(() => {
+    if (hasSucceeded) {
+      toast({
+        title: "Organisation created successfully",
+        description:
+          "You can view organisation by switching to it in the sidebar.",
+      });
+    }
+  }, [hasSucceeded]);
 
   async function handleCreateSubmit(values: z.infer<typeof newOrgSchema>) {
-    console.log("handle joinsubmit hit");
     execute(values);
-    toast({
-      title: "Organisation created successfully",
-      description: "You can view organisation by switching to it in the sidebar.",
-    });
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
+
   }
 
   const form = useForm<z.infer<typeof newOrgSchema>>({
@@ -86,8 +87,11 @@ export default function CreateOrgForm() {
             )}
           />
         </div>
-        <Button type="submit" className="w-full">
-          Create organisation
+        <Button
+          type="submit"
+          className={cn("w-full", isExecuting ? "animate-pulse" : "")}
+        >
+          Join Organisation
         </Button>
       </form>
     </Form>

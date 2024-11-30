@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import loginArt from "@/public/loginArt2.png";
-import { PasswordReset } from "@/server/actions/passwordReset";
+import { PasswordReset } from "@/server/actions/auth/passwordReset";
 import { ResetPassSchema } from "@/types/forgotPassSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useEffect } from "react";
@@ -30,7 +30,10 @@ type FormData = z.infer<typeof ResetPassSchema>;
 export default function ResetPasswordPage() {
   const [token, setToken] = useState("");
   const router = useRouter();
-  const { execute, isExecuting, result, hasSucceeded } = useAction(PasswordReset, {});
+  const { execute, isExecuting, result, hasSucceeded } = useAction(
+    PasswordReset,
+    {},
+  );
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -45,8 +48,6 @@ export default function ResetPasswordPage() {
       router.push("/auth/login");
     }
   }, [hasSucceeded, router]);
-  
-
 
   const form = useForm<FormData>({
     resolver: zodResolver(ResetPassSchema),
@@ -58,7 +59,6 @@ export default function ResetPasswordPage() {
 
   const onSubmit = async (data: FormData) => {
     execute({ ...data, token });
-    console.log(result);
     if (hasSucceeded) {
       setTimeout(() => {
         router.push("/auth/login");
@@ -73,7 +73,7 @@ export default function ResetPasswordPage() {
           href="/auth/login"
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            "absolute right-4 top-4 md:right-8 md:top-8"
+            "absolute right-4 top-4 md:right-8 md:top-8",
           )}
         >
           Login

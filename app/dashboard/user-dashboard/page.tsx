@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { GetOrgDetails } from "@/server/actions/getOrgDetails";
+import { GetOrgDetails } from "@/server/actions/orgs/getOrgDetails";
 import { prisma } from "@/server/prisma";
 
 import { auth } from "@/server/auth";

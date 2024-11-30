@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { updateRolePermissions } from "@/server/actions/updateRolePermissions";
+import { updateRolePermissions } from "@/server/actions/membership/updateRolePermissions";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { useSession } from "next-auth/react";

@@ -21,7 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Pencil } from "lucide-react";
-import { EditOrgDetails } from "@/server/actions/editOrgDetails";
+import { EditOrgDetails } from "@/server/actions/orgs/editOrgDetails";
 
 interface OrgHeaderProps {
   organization: {
@@ -41,7 +41,7 @@ export function OrgHeader({ organization }: OrgHeaderProps) {
     const success = await EditOrgDetails(
       organization.id,
       editedName,
-      editedDescription
+      editedDescription,
     );
     if (success) {
       setIsEditing(false);
@@ -49,7 +49,6 @@ export function OrgHeader({ organization }: OrgHeaderProps) {
         title: "Organization Updated",
         description: "Organization details have been successfully updated.",
       });
-      // You might want to refresh the server data here
     } else {
       toast({
         title: "Update Failed",

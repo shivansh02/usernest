@@ -1,10 +1,10 @@
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/server/prisma";
-import { getUser, getAccount } from "@/server/actions/getUser";
+import { getUser, getAccount } from "@/server/actions/membership/getUser";
 import authConfig from "./auth.config";
-import { getMemberships } from "./actions/getMemberships";
-import { getPermsById } from "./actions/getPermsInOrg";
+import { getMemberships } from "./actions/membership/getMemberships";
+import { getPermsById } from "./actions/membership/getPermsInOrg";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -69,7 +69,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             token.user.orgId = "";
           }
           const perms = await getPermsById(token.user.orgId, existingUser.id);
-          if(perms && perms.length > 0) {
+          if (perms && perms.length > 0) {
             token.user.perms = perms;
           } else {
             token.user.perms = [];
@@ -82,30 +82,3 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   ...authConfig,
 });
-
-// jwt: async ({ token, user, trigger, session }) => {
-//   if (trigger === "update" && session) {
-//     console.log("Trigger", trigger);
-//     token = { ...token, ...session };
-//     console.log("Token after update", token);
-//   }
-//   if (user) {
-//     console.log("USER", user);
-//     if (trigger === "signIn" || !token.tenant || !token.workspace) {
-//       console.log("Trigger", trigger);
-//       token.role = user.role;
-//       const tenants = await getTenants();
-//       if (tenants.data.length > 0) {
-//         const firstTenantId = tenants.data[0].id;
-//         token.tenant = firstTenantId;
-//         const workspaces = await getWorkspaces(firstTenantId);
-//         token.workspace =
-//           workspaces.data.length > 0 ? workspaces.data[0].id : "";
-//       } else {
-//         token.tenant = "";
-//         token.workspace = "";
-//       }
-//     }
-//   }
-//   return token;
-// },

@@ -8,7 +8,6 @@ import JoinOrgForm from "./_components/joinOrgForm";
 import { signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 
-
 import loginArt from "@/public/loginArt2.png";
 
 export default function OnboardingPage() {

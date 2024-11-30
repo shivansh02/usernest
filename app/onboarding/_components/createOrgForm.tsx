@@ -15,20 +15,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { useToast } from "@/hooks/use-toast";
-import { CreateOrg } from "@/server/actions/createOrg";
+import { CreateOrg } from "@/server/actions/orgs/createOrg";
 import { newOrgSchema } from "@/types/newOrgSchema";
 import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
 import * as z from "zod";
+import { cn } from "@/lib/utils";
 
 export default function CreateOrgForm() {
-  const { execute, isExecuting, result, status } = useAction(CreateOrg, {});
+  const { execute, isExecuting} = useAction(CreateOrg, {});
   const router = useRouter();
   const { toast } = useToast();
 
-
   async function handleCreateSubmit(values: z.infer<typeof newOrgSchema>) {
-    console.log("handle joinsubmit hit");
     execute(values);
     router.push("/dashboard");
   }
@@ -80,9 +79,12 @@ export default function CreateOrgForm() {
             )}
           />
         </div>
-        <Button type="submit" className="w-full">
-          Create organisation
-        </Button>
+        <Button
+            type="submit"
+            className={cn("w-full", isExecuting ? "animate-pulse" : "")}
+          >
+            Create Organisation
+          </Button>
       </form>
     </Form>
   );

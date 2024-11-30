@@ -32,8 +32,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { changeRole } from "@/server/actions/changeRole";
-import { DeleteMembership } from "@/server/actions/deleteMembership";
+import { changeRole } from "@/server/actions/membership/changeRole";
+import { DeleteMembership } from "@/server/actions/membership/deleteMembership";
 import { useSession } from "next-auth/react";
 import { Role, User } from "../page";
 import FilterSection from "./filterSection";
@@ -50,7 +50,7 @@ const UsersTable = ({ usersData, myRole }: UsersTableProps) => {
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -77,7 +77,6 @@ const UsersTable = ({ usersData, myRole }: UsersTableProps) => {
   };
 
   const columns: ColumnDef<User>[] = [
-    
     {
       accessorKey: "name",
       header: ({ column }) => {
@@ -118,14 +117,7 @@ const UsersTable = ({ usersData, myRole }: UsersTableProps) => {
             disabled={user.id === session?.user.id || checkDisabled(user.role)}
             value={user.role}
             onValueChange={async (newRole: Role) => {
-              console.log(`Role updated for ${user.name}:`, newRole);
-              if (orgId) {
-                console.log(user, orgId, newRole);
-                const success = await changeRole(user.id, orgId, newRole);
-                console.log("success:::", success);
-              } else {
-                console.log("No organisation selected!!");
-              }
+                const success = await changeRole(user.id, orgId!, newRole);
             }}
           >
             <SelectTrigger className="w-[180px]">
@@ -133,10 +125,7 @@ const UsersTable = ({ usersData, myRole }: UsersTableProps) => {
             </SelectTrigger>
             <SelectContent>
               {getRoles(myRole).map((role) => (
-                <SelectItem
-                  key={role}
-                  value={role}
-                >
+                <SelectItem key={role} value={role}>
                   {role}
                 </SelectItem>
               ))}
@@ -157,9 +146,7 @@ const UsersTable = ({ usersData, myRole }: UsersTableProps) => {
             variant="ghost"
             className="h-8 w-8 p-0"
             onClick={async () => {
-              console.log("delete button hit");
               if (orgId) {
-                console.log("org exists");
                 const success = await DeleteMembership(user.id, orgId);
               }
             }}
@@ -203,7 +190,7 @@ const UsersTable = ({ usersData, myRole }: UsersTableProps) => {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -222,7 +209,7 @@ const UsersTable = ({ usersData, myRole }: UsersTableProps) => {
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

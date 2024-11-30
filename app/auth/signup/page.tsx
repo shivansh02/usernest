@@ -1,10 +1,10 @@
-import Image from "next/image"
-import Link from "next/link"
+import Image from "next/image";
+import Link from "next/link";
 
-import { RegisterForm } from "@/components/auth/registerForm"
-import { buttonVariants } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import loginArt from "@/public/loginArt2.png"
+import { RegisterForm } from "@/components/auth/registerForm";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import loginArt from "@/public/loginArt2.png";
 
 export default function AuthenticationPage() {
   return (
@@ -30,16 +30,21 @@ export default function AuthenticationPage() {
           href="/auth/login"
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            "absolute right-4 top-4 md:right-8 md:top-8"
+            "absolute right-4 top-4 md:right-8 md:top-8",
           )}
         >
           Login
         </Link>
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
-          <div className="absolute inset-0 bg-zinc-900" >
-            <Image src={loginArt} alt="Authentication" layout="fill" objectFit="cover" />
+          <div className="absolute inset-0 bg-zinc-900">
+            <Image
+              src={loginArt}
+              alt="Authentication"
+              layout="fill"
+              objectFit="cover"
+            />
           </div>
-          
+
           <div className="relative z-20 flex items-center text-lg font-medium">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -58,7 +63,8 @@ export default function AuthenticationPage() {
           <div className="relative z-20 mt-auto">
             <blockquote className="space-y-2">
               <p className="text-lg">
-                &ldquo;Hands down the best user management software in the segment, 10x-ed our speed.&rdquo;
+                &ldquo;Hands down the best user management software in the
+                segment, 10x-ed our speed.&rdquo;
               </p>
               <footer className="text-sm">Someone</footer>
             </blockquote>
@@ -79,5 +85,5 @@ export default function AuthenticationPage() {
         </div>
       </div>
     </>
-  )
+  );
 }

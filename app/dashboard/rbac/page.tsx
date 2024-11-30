@@ -1,9 +1,8 @@
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { GetAllPerms } from "@/server/actions/getAllPerms";
+import { GetAllPerms } from "@/server/actions/membership/getAllPerms";
 import RbacCard from "./_components/rbacCard";
 import { auth } from "@/server/auth";
 import NoPermission from "@/components/common/noPermission";
-
 
 export default async function PermissionManagement() {
   const session = await auth();
@@ -13,10 +12,7 @@ export default async function PermissionManagement() {
   if (!perms.includes("EDIT_PERMS")) {
     return <NoPermission />;
   }
-  const managerPerms = await GetAllPerms(
-    orgId,
-    "MANAGER"
-  );
+  const managerPerms = await GetAllPerms(orgId, "MANAGER");
   const managerPermsArray = managerPerms.map((perm) => perm.id);
   const userPerms = await GetAllPerms(orgId, "USER");
   const userPermsArray = userPerms.map((perm) => perm.id);

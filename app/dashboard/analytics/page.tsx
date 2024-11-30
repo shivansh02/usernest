@@ -126,10 +126,7 @@ export default async function AnalyticsDashboard() {
                 <CardContent>
                   <div className="text-2xl font-bold">
                     {card.title === "Total Revenue" ? "$" : ""}
-                    <CountUpWrapper
-                      value={card.value}
-                      decimals={0}
-                    />
+                    <CountUpWrapper value={card.value} decimals={0} />
                   </div>
                   <p className="text-xs text-muted-foreground">{card.change}</p>
                 </CardContent>

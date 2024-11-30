@@ -1,8 +1,8 @@
 "use client";
-import { verifyToken } from "@/server/actions/tokens";
+import { verifyToken } from "@/server/actions/auth/tokens";
 import { Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import {useState } from "react";
+import { useState } from "react";
 import { Suspense } from "react";
 
 import Image from "next/image";
@@ -15,8 +15,7 @@ import loginArt from "@/public/loginArt2.png";
 export default function TokenVerificationPage() {
   const [token, setToken] = useState<string | null>(null);
   const Router = useRouter();
-  // const token = useSearchParams().get("token");
-  
+
   const [status, setStatus] = useState<string>("verifying");
   if (!token) {
     return <p>No verification token found.</p>;
@@ -26,20 +25,16 @@ export default function TokenVerificationPage() {
     const data = await verifyToken(token);
     if (data.success) {
       setStatus("verified");
-      console.log(status);
-      console.log(data);
       setTimeout(() => {
         Router.push("/auth/login");
       }, 2000);
     } else if (data.success === false) {
       setStatus("error");
-      console.log(data);
-      console.log(status);
     }
   };
   const urlParams = new URLSearchParams(window.location.search);
   setToken(urlParams.get("token"));
-  
+
   verify();
 
   return (
@@ -49,7 +44,7 @@ export default function TokenVerificationPage() {
           href="/auth/signup"
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            "absolute right-4 top-4 md:right-8 md:top-8"
+            "absolute right-4 top-4 md:right-8 md:top-8",
           )}
         >
           Sign Up

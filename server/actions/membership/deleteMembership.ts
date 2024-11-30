@@ -2,13 +2,7 @@
 import { prisma } from "@/server/prisma";
 import { revalidatePath } from "next/cache";
 
-type Role = "ADMIN" | "MANAGER" | "USER";
-
-export async function changeRole(
-  userId: string,
-  organisationId: string,
-  role: string
-) {
+export async function DeleteMembership(userId: string, organisationId: string) {
   try {
     const membership = await prisma.membership.findUnique({
       where: {
@@ -22,23 +16,20 @@ export async function changeRole(
         organisation: true,
       },
     });
-    if(membership?.user.id == membership?.organisation.creatorId) {
-      return { failure: "Cannot change role of owner" };
+    if (membership?.user.id == membership?.organisation.creatorId) {
+      return { failure: "Cannot kick organisation owner" };
     }
-    const updatedUser = await prisma.membership.update({
+    await prisma.membership.delete({
       where: {
         userId_organisationId: {
           userId: userId,
           organisationId: organisationId,
         },
       },
-      data: {
-        role: role as Role,
-      },
     });
     revalidatePath("/dashboard/manage-users");
-    return { success: "Role changed successfully" };
+    return { success: "membership deleted successfully" };
   } catch (error) {
-    return { failure: "Role change failed" };
+    return { failure: "failed to delete membership" };
   }
 }

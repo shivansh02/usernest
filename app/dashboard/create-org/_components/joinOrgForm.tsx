@@ -13,29 +13,36 @@ import { Label } from "@/components/ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { JoinOrg } from "@/server/actions/joinOrg";
+import { JoinOrg } from "@/server/actions/orgs/joinOrg";
 import { orgInvite } from "@/types/newOrgSchema";
 import { useAction } from "next-safe-action/hooks";
 import * as z from "zod";
-import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
+import { useEffect } from "react";
+import { cn } from "@/lib/utils";
 
 export default function JoinOrgForm() {
   const { toast } = useToast();
-  const { execute, result,  } = useAction(JoinOrg, {});
+  const { execute, result, isExecuting } = useAction(JoinOrg, {});
+  useEffect(() => {
+    if (result.data?.success) {
+      toast({
+        title: "Organisation joined successfully",
+        description:
+          "You can view organisation by switching to it in the sidebar.",
+      });
+    }
+    else if (result.data?.error) {
+      toast({
+        title: "Organisation not joined",
+        description:
+          "Please check your invite code and try again.",
+      });
+    }
+  }, [result.data]);
 
   async function handleJoinSubmit(values: z.infer<typeof orgInvite>) {
-    console.log("handle joinsubmit hit");
     execute(values);
-    console.log("result", result);
-    toast({
-      title: "Organisation joined successfully",
-      description:
-        "You can view organisation by switching to it in the sidebar.",
-    });
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
   }
 
   const form = useForm<z.infer<typeof orgInvite>>({
@@ -66,7 +73,7 @@ export default function JoinOrgForm() {
             )}
           />
         </div>
-        <Button type="submit" className="w-full">
+        <Button type="submit" className={cn("w-full", isExecuting? "animate-pulse":"")}>
           Join organisation
         </Button>
       </form>

@@ -4,6 +4,7 @@ import { actionClient } from "@/lib/safe-action";
 import { prisma } from "@/server/prisma";
 import { newOrgSchema } from "@/types/newOrgSchema";
 import { Role } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 export const CreateOrg = actionClient
   .schema(newOrgSchema)
@@ -22,7 +23,7 @@ export const CreateOrg = actionClient
       });
       if (!existingUser) return { failure: "user email not found" };
 
-      // Create a new organization
+      // Create new organization
       const newOrg = await prisma.organisation.create({
         data: {
           name: name,
@@ -32,7 +33,7 @@ export const CreateOrg = actionClient
         },
       });
 
-      // Assign the user as an ADMIN in the organization
+      // Assign the user as an ADMIN
       await prisma.membership.create({
         data: {
           userId: existingUser.id,
@@ -41,24 +42,22 @@ export const CreateOrg = actionClient
         },
       });
 
-      // Fetch all permissions from the Permission table
       const allPermissions = await prisma.permission.findMany();
 
-      // Map permissions to RolePermission entries for the ADMIN role
       const adminPermissions = allPermissions.map((permission) => ({
         organisationId: newOrg.id,
         role: Role.ADMIN,
         permissionId: permission.id,
       }));
 
-      // Insert all permissions for ADMIN role
+      // Insert all permissions for ADMIN
       await prisma.rolePermission.createMany({
         data: adminPermissions,
       });
+      revalidatePath("/dashboard", "layout");
 
       return { success: newOrg };
     } catch (error) {
-      console.log("Error creating organization:", error);
       return { failure: "An error occurred while creating the organization" };
     }
   });

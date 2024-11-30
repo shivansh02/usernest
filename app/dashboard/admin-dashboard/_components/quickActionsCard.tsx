@@ -1,10 +1,10 @@
-'use client'
+"use client";
 
-import { useState, useTransition } from "react"
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { BarChart, Users, Trash } from "lucide-react"
-import Link from "next/link"
+import { useState, useTransition } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { BarChart, Users, Trash } from "lucide-react";
+import Link from "next/link";
 import {
   Dialog,
   DialogContent,
@@ -13,26 +13,25 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { deleteOrganization } from "@/server/actions/deleteOrg"
-import { useSession } from "next-auth/react"
-import { getPermsById } from "@/server/actions/getPermsInOrg"
+} from "@/components/ui/dialog";
+import { deleteOrganization } from "@/server/actions/orgs/deleteOrg";
+import { useSession } from "next-auth/react";
+import { getPermsById } from "@/server/actions/membership/getPermsInOrg";
 
 interface QuickActionsCardProps {
-  organizationId: string
+  organizationId: string;
 }
 
 export function QuickActionsCard({ organizationId }: QuickActionsCardProps) {
-  const {data: session, update} =  useSession();
+  const { data: session, update } = useSession();
 
   const user = session?.user;
-  const [isOpen, setIsOpen] = useState(false)
-  const [isPending, startTransition] = useTransition()
+  const [isOpen, setIsOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const handleDelete = () => {
     startTransition(async () => {
-      
-      const result = await deleteOrganization(organizationId)
+      const result = await deleteOrganization(organizationId);
       if (result.success) {
         await update({
           user: {
@@ -41,10 +40,11 @@ export function QuickActionsCard({ organizationId }: QuickActionsCardProps) {
             perms: await getPermsById(result.newOrgId, user!.id),
           },
         });
-        setIsOpen(false)
-
-    }})
-  }
+        setIsOpen(false);
+        window.location.reload();
+      }
+    });
+  };
 
   return (
     <Card>
@@ -73,7 +73,9 @@ export function QuickActionsCard({ organizationId }: QuickActionsCardProps) {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Are you sure you want to delete this organization?</DialogTitle>
+              <DialogTitle>
+                Are you sure you want to delete this organization?
+              </DialogTitle>
               <DialogDescription>
                 This action cannot be undone. This will permanently delete your
                 organization and remove all associated users.
@@ -83,7 +85,11 @@ export function QuickActionsCard({ organizationId }: QuickActionsCardProps) {
               <Button variant="outline" onClick={() => setIsOpen(false)}>
                 Cancel
               </Button>
-              <Button variant="destructive" onClick={handleDelete} disabled={isPending}>
+              <Button
+                variant="destructive"
+                onClick={handleDelete}
+                disabled={isPending}
+              >
                 {isPending ? "Deleting..." : "Delete Organization"}
               </Button>
             </DialogFooter>
@@ -91,6 +97,5 @@ export function QuickActionsCard({ organizationId }: QuickActionsCardProps) {
         </Dialog>
       </CardContent>
     </Card>
-  )
+  );
 }
-

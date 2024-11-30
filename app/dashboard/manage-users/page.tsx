@@ -2,7 +2,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import UsersTable from "./_components/usersTable";
 import { prisma } from "@/server/prisma";
 import { auth } from "@/server/auth";
-import {getMyRole } from "@/server/actions/getMyRole";
+import { getMyRole } from "@/server/actions/membership/getMyRole";
 import NoPermission from "@/components/common/noPermission";
 
 export type User = {
@@ -42,13 +42,11 @@ const UserActionPage = async () => {
     role: membership.role,
   }));
 
-  
   const perms = session?.user.perms!;
 
-  if(!perms.includes("MANAGE_USERS")) {
+  if (!perms.includes("MANAGE_USERS")) {
     return <NoPermission />;
   }
-
 
   return (
     <div className="w-full flex-1">
@@ -58,7 +56,7 @@ const UserActionPage = async () => {
       </header>
       <div className="p-6">
         <h1 className="my-2 text-xl text-gray-500">Manage users</h1>
-        <UsersTable usersData={users} myRole={myRole!}/>
+        <UsersTable usersData={users} myRole={myRole!} />
       </div>
     </div>
   );

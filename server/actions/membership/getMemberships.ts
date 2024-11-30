@@ -13,9 +13,8 @@ interface GetMembershipsResponse {
 }
 
 export async function getMemberships(
-  userId: string
+  userId: string,
 ): Promise<GetMembershipsResponse> {
-  console.log("Getting memberships for user", userId);
   try {
     const orgs = await prisma.membership.findMany({
       where: {
@@ -38,9 +37,7 @@ export async function getMemberships(
       role: membership.role,
     }));
     return { orglist: orgsList };
-    // return orgs
   } catch (error) {
-    console.log(error);
     throw new Error(`Failed to fetch organisations: ${error}`);
   }
 }

@@ -5,7 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { RefreshCw, Copy } from "lucide-react";
-import { RegenerateInvite } from "@/server/actions/regenerateInvite";
+import { RegenerateInvite } from "@/server/actions/orgs/regenerateInvite";
 
 interface InviteCodeCardProps {
   organizationId: string;
@@ -23,7 +23,8 @@ export function InviteCodeCard({
     navigator.clipboard.writeText(currentInviteCode);
     toast({
       title: "Invite Code Copied",
-      description: "Share this invite code with others to join your organization.",
+      description:
+        "Share this invite code with others to join your organization.",
     });
   }
 
@@ -68,4 +69,3 @@ export function InviteCodeCard({
     </Card>
   );
 }
-

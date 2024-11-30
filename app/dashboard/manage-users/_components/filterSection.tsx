@@ -36,7 +36,6 @@ const FilterSection = ({ table }: FilterSectionProps) => {
       />
       <Select
         onValueChange={(value: any) => {
-          console.log("value: ", value);
           if (value === "all") {
             table.getColumn("role")?.setFilterValue(undefined);
           } else {

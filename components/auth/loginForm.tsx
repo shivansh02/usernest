@@ -18,19 +18,17 @@ import {
 } from "@/components/ui/form";
 import { LoginSchema } from "@/types/loginSchema";
 import { useAction } from "next-safe-action/hooks";
-import { EmailSignIn } from "@/server/actions/emailSignin";
+import { EmailSignIn } from "@/server/actions/auth/emailSignin";
 import Link from "next/link";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function LoginForm({ className, ...props }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  const { execute, isExecuting, result } = useAction(EmailSignIn, {});
+  const { execute, isExecuting, result, status } = useAction(EmailSignIn, {});
 
   async function onSubmit(values: z.infer<typeof LoginSchema>) {
-    console.log(values);
-    execute(values);
+    await execute(values);
   }
 
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -105,15 +103,12 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
         }}
         variant="outline"
         type="button"
-        disabled={isLoading}
+        disabled={status==="executing"}
       >
-
         GitHub
       </Button>
       {result.data && (
-         <p className="text-red-500 text-center">
-         {result.data.error}
-       </p>
+        <p className="text-red-500 text-center">{result.data.error}</p>
       )}
     </div>
   );

@@ -16,8 +16,7 @@ export default function ForgotPasswordPage() {
     const email = urlParams.get("email");
     if (email) {
       setEmail(email);
-    }
-    else {
+    } else {
       setEmail("yourmail@email.com");
     }
   }, []);
@@ -29,16 +28,21 @@ export default function ForgotPasswordPage() {
           href="/auth/login"
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            "absolute right-4 top-4 md:right-8 md:top-8"
+            "absolute right-4 top-4 md:right-8 md:top-8",
           )}
         >
           Login
         </Link>
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
-          <div className="absolute inset-0 bg-zinc-900" >
-            <Image src={loginArt} alt="Authentication" layout="fill" objectFit="cover" />
+          <div className="absolute inset-0 bg-zinc-900">
+            <Image
+              src={loginArt}
+              alt="Authentication"
+              layout="fill"
+              objectFit="cover"
+            />
           </div>
-          
+
           <div className="relative z-20 flex items-center text-lg font-medium">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -57,7 +61,8 @@ export default function ForgotPasswordPage() {
           <div className="relative z-20 mt-auto">
             <blockquote className="space-y-2">
               <p className="text-lg">
-                &ldquo;Hands down the best user management software in the segment, 10x-ed our speed.&rdquo;
+                &ldquo;Hands down the best user management software in the
+                segment, 10x-ed our speed.&rdquo;
               </p>
               <footer className="text-sm">Someone</footer>
             </blockquote>
@@ -70,17 +75,14 @@ export default function ForgotPasswordPage() {
                 Forgot your password?
               </h1>
               <p className="text-sm text-muted-foreground">
-                An email will be sent to you with instructions on how to reset your password.
+                An email will be sent to you with instructions on how to reset
+                your password.
               </p>
             </div>
-            {
-              email && (
-                <ForgotPasswordForm email={email} />
-              )
-            }
+            {email && <ForgotPasswordForm email={email} />}
           </div>
         </div>
       </div>
     </>
-  )
+  );
 }

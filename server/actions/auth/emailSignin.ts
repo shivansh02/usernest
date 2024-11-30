@@ -3,7 +3,7 @@ import { LoginSchema } from "@/types/loginSchema";
 import { actionClient } from "@/lib/safe-action";
 import { signIn } from "@/server/auth";
 import { AuthError } from "next-auth";
-import { checkOnboarding } from "@/server/actions/checkOnboarding";
+import { checkOnboarding } from "@/server/actions/membership/checkOnboarding";
 import { redirect } from "next/navigation";
 
 export const EmailSignIn = actionClient

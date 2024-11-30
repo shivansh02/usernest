@@ -32,8 +32,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { changeRole } from "@/server/actions/changeRole";
-import { DeleteMembership } from "@/server/actions/deleteMembership";
+import { changeRole } from "@/server/actions/membership/changeRole";
+import { DeleteMembership } from "@/server/actions/membership/deleteMembership";
 import { useSession } from "next-auth/react";
 import TableFooter from "@/components/common/tableFooter";
 
@@ -56,7 +56,7 @@ const UsersList = ({ usersData }: UsersTableProps) => {
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -97,12 +97,9 @@ const UsersList = ({ usersData }: UsersTableProps) => {
       header: "Role",
       cell: ({ row }) => {
         const user = row.original;
-        return (
-          user.role
-        )
+        return user.role;
       },
     },
-    
   ];
 
   const table = useReactTable({
@@ -136,7 +133,7 @@ const UsersList = ({ usersData }: UsersTableProps) => {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -155,7 +152,7 @@ const UsersList = ({ usersData }: UsersTableProps) => {
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

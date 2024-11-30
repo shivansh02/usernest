@@ -7,9 +7,8 @@ type Role = "ADMIN" | "MANAGER" | "USER";
 export async function updateRolePermissions(
   organisationId: string,
   role: Role,
-  permissions: string[]
+  permissions: string[],
 ) {
-
   // Delete all existing permissions for the role
   try {
     await prisma.rolePermission.deleteMany({

@@ -3,12 +3,7 @@ import { prisma } from "@/server/prisma";
 import { auth } from "@/server/auth";
 
 export async function getPermsById(organisationId: string, userId: string) {
-  console.log(
-    "Getting permissions for user",
-    userId,
-    "in organisation",
-    organisationId
-  );
+
   const permissions = await prisma.permission.findMany({
     where: {
       roles: {
@@ -31,11 +26,10 @@ export async function getPermsById(organisationId: string, userId: string) {
   });
   const permNames = permissions.map((perm) => perm.name);
 
-  console.log("User's permissions from function:", permNames);
   return permNames;
 }
 
-export async function getPerms2(organisationId: string) {
+export async function getPerms(organisationId: string) {
   const session = await auth();
   const user = session?.user;
   if (!user) {
@@ -62,9 +56,5 @@ export async function getPerms2(organisationId: string) {
     },
   });
 
-  // console.log(
-  //   "User's permissions:",
-  //   permissions.map((perm) => perm.name)
-  // );
   return permissions;
 }

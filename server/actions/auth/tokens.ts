@@ -33,7 +33,7 @@ export const getPasswordResetToken = async (email: string) => {
   } catch (error) {
     return null;
   }
-}
+};
 export const getPasswordResetTokenByToken = async (token: string) => {
   try {
     const passwordResetToken = await prisma.passwordResetToken.findFirst({
@@ -45,7 +45,7 @@ export const getPasswordResetTokenByToken = async (token: string) => {
   } catch (error) {
     return null;
   }
-}
+};
 export const generateVerificationToken = async (email: string) => {
   const id = crypto.randomUUID();
   const token = crypto.randomUUID();
@@ -63,7 +63,7 @@ export const generateVerificationToken = async (email: string) => {
       token: token,
       expires: expires,
       email: email,
-      id: id
+      id: id,
     },
   });
 
@@ -87,12 +87,12 @@ export const generatePasswordResetToken = async (email: string) => {
       token: token,
       expires: expires,
       email: email,
-      id: id
+      id: id,
     },
   });
 
   return passwordResetToken;
-}
+};
 
 const resend = new Resend(process.env.RESEND_KEY);
 const domain = getBaseUrl();
@@ -100,52 +100,52 @@ const domain = getBaseUrl();
 export const sendVerificationEmail = async (email: string, token: string) => {
   const confirmLink = `${domain}/auth/verification-token?token=${token}`;
   const { data, error } = await resend.emails.send({
-    from: 'Verification <usernest@shivansh.space>',
+    from: "Verification <usernest@shivansh.space>",
     to: email,
     subject: "Usernest Verification Email",
     html: `<p>Click to <a href='${confirmLink}'>confirm your email</a></p>`,
-
   });
-  if (error) console.log(error);
   if (data) return data;
 };
 
 export const sendPasswordResetEmail = async (email: string, token: string) => {
   const confirmLink = `${domain}/auth/reset-password?token=${token}`;
   const { data, error } = await resend.emails.send({
-    from: 'Verification <usernest@shivansh.space>',
+    from: "Verification <usernest@shivansh.space>",
     to: email,
     subject: "Usernest Password Reset Email",
     html: `<p>Click to <a href='${confirmLink}'>reset your password</a></p>`,
   });
-  if(error) return { success: false, error: "Error sending reset email" };
-  if (error) console.log(error);
-  return { success: true, message: "Verification email sent to your registered email." };
-}
+  if (error) return { success: false, error: "Error sending reset email" };
+  return {
+    success: true,
+    message: "Verification email sent to your registered email.",
+  };
+};
 
 export const verifyToken = async (token: string) => {
   const existingToken = await prisma.verificationToken.findFirst({
-      where: { token },
+    where: { token },
   });
 
   if (!existingToken) return { success: false, message: "Invalid token" };
-  if (existingToken.expires < new Date()) return { success: false, message: "Token expired" };
+  if (existingToken.expires < new Date())
+    return { success: false, message: "Token expired" };
 
   const existingUser = await prisma.user.findUnique({
-      where: { email: existingToken.email },
+    where: { email: existingToken.email },
   });
 
   if (!existingUser) return { success: false, message: "Email not registered" };
 
   await prisma.user.update({
-      data: { emailVerified: new Date() },
-      where: { email: existingUser.email },
+    data: { emailVerified: new Date() },
+    where: { email: existingUser.email },
   });
 
   await prisma.verificationToken.delete({
-      where: { id: existingToken.id },
+    where: { id: existingToken.id },
   });
 
   return { success: true, message: "Token verified successfully" };
-
 };

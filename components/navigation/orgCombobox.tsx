@@ -16,19 +16,27 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import useDashboardStore, { Organisation } from "@/hooks/useDashboardStore";
 import { useSession } from "next-auth/react";
-import { getOrgs } from "@/server/actions/getOrgs";
-import { getPermsById } from "@/server/actions/getPermsInOrg";
+import { getOrgs } from "@/server/actions/orgs/getOrgs";
+import { getPermsById } from "@/server/actions/membership/getPermsInOrg";
 
 interface OrgComboProps {
   session: Session;
 }
 
+export interface Organisation {
+  role: string;
+  organisation: {
+    id: string;
+    name: string;
+    inviteCode: string | null;
+    desc: string;
+  };
+}
+
 interface Session {
-  expires: string,
+  expires: string;
   user: {
-    // optional email
     email?: string | null | undefined;
     id: string;
     image?: string | null | undefined;
@@ -39,24 +47,15 @@ interface Session {
   };
 }
 
-export function OrgCombo(userSession : any) {
+interface ComboboxProps {
+  userSession: any,
+  orgs: Organisation[]
+}
+
+export function OrgCombo({ userSession, orgs }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
-
   const { update } = useSession();
-  console.log("userSession", userSession)
-  // console.log(session)
-  const { fetchedOrgs, setFetchedOrgs } = useDashboardStore();
-
-  useEffect(() => {
-    async function fetchOrgs() {
-      const orgs = (await getOrgs()) as Organisation[];
-      console.log("Orgs", orgs);
-      setFetchedOrgs(orgs);
-    }
-    if (fetchedOrgs.length === 0) fetchOrgs();
-  }, []);
-  // console.log("orgId: ", userSession?.user.orgId);
-
+  
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -66,9 +65,11 @@ export function OrgCombo(userSession : any) {
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {userSession?.session.user.orgId
-            ? fetchedOrgs.find((org) => org.organisation.id === userSession?.session.user.orgId)
-                ?.organisation.name
+          {userSession?.user.orgId
+            ? orgs.find(
+                (org) =>
+                  org.organisation.id === userSession?.user.orgId,
+              )?.organisation.name
             : "Select Organisation"}
           <ChevronsUpDown className="opacity-50" />
         </Button>
@@ -79,24 +80,24 @@ export function OrgCombo(userSession : any) {
           <CommandList>
             <CommandEmpty>No organisation found</CommandEmpty>
             <CommandGroup>
-              {fetchedOrgs.map((org) => (
+              {orgs.map((org) => (
                 <CommandItem
                   key={org.organisation.id}
                   value={org.organisation.id}
                   className={cn(
                     "cursor-pointer",
-                    userSession?.session.user.orgId === org.organisation.id
+                    userSession?.user.orgId === org.organisation.id
                       ? " font-semibold"
-                      : "text-secondary-foreground font-thin"
+                      : "text-secondary-foreground font-thin",
                   )}
                   onSelect={async (currentValue: any) => {
                     await update({
                       user: {
-                        ...userSession!.session.user,
+                        ...userSession!.user,
                         orgId: currentValue,
                         perms: await getPermsById(
                           currentValue,
-                          userSession!.session.user.id
+                          userSession!.user.id,
                         ),
                       },
                     });
@@ -109,9 +110,9 @@ export function OrgCombo(userSession : any) {
                   <Check
                     className={cn(
                       "ml-auto",
-                      userSession?.session.user.orgId === org.organisation.name
+                      userSession?.user.orgId === org.organisation.name
                         ? "opacity-100"
-                        : "opacity-0"
+                        : "opacity-0",
                     )}
                   />
                 </CommandItem>

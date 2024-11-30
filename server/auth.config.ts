@@ -36,8 +36,3 @@ export default {
   session: { strategy: "jwt" },
 } satisfies NextAuthConfig;
 
-// export default {
-//     providers: providers,
-//     session: {strategy: "jwt"
-//     },
-//   } satisfies NextAuthConfig;
