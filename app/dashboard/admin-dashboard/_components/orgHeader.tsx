@@ -62,7 +62,7 @@ export function OrgHeader({ organization }: OrgHeaderProps) {
     <Card className="mb-6">
       <CardHeader className="flex flex-row items-center gap-4">
         <Avatar className="h-20 w-20">
-          <AvatarFallback>{organization.name.slice(0, 2)}</AvatarFallback>
+          <AvatarFallback className="bg-stone-900 text-white">{organization.name.slice(0, 2)}</AvatarFallback>
         </Avatar>
         <div className="flex-grow">
           <CardTitle className="text-2xl">{organization.name}</CardTitle>
