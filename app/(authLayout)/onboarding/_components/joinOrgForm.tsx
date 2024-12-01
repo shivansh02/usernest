@@ -21,7 +21,7 @@ import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
 
 export default function JoinOrgForm() {
-  const { execute, result, hasSucceeded } = useAction(JoinOrg, {});
+  const { execute } = useAction(JoinOrg, {});
   const router = useRouter();
 
   async function handleJoinSubmit(values: z.infer<typeof orgInvite>) {

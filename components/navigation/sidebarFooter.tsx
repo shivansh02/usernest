@@ -34,7 +34,7 @@ const AppSidebarFooter = ({ user }: AppSidebarFooterProps) => {
         >
           <Avatar className="size-8 border-2  rounded-full">
             <AvatarFallback className="flex items-center justify-center mt-1.5">
-              <UserIcon className="size-8" />
+              <UserIcon className="size-8 text-orange-400" />
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col items-start gap-0.5 leading-none">

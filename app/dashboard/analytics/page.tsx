@@ -101,7 +101,7 @@ export default async function AnalyticsDashboard() {
   const perms = session?.user.perms!;
 
   return (
-    <PermissionProvider permissions={["VIEW_ANALYTICS_DASHBOARD"]} userPermissions={perms}>
+    <PermissionProvider permissions={["VIEW_ANALYTICS"]} userPermissions={perms}>
     <div className="flex flex-col min-h-screen w-full">
       <header className="bg-background border-b">
         <div className="flex space-x-4 container mx-auto px-4 py-4">
