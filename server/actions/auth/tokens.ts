@@ -125,7 +125,7 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
 
 export const verifyToken = async (token: string) => {
   const existingToken = await prisma.verificationToken.findFirst({
-    where: { token },
+    where: { token: token },
   });
 
   if (!existingToken) return { success: false, message: "Invalid token" };
