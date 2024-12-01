@@ -51,11 +51,11 @@ export function QuickActionsCard({ organizationId }: QuickActionsCardProps) {
       <CardHeader>
         <CardTitle>Quick Actions</CardTitle>
       </CardHeader>
-      <CardContent className="flex gap-2">
+      <CardContent className="flex flex-wrap gap-2">
         <Button asChild>
           <Link href={`/dashboard/analytics`} className="flex gap-4">
             <BarChart className="h-4 w-4" />
-            View Full Analytics
+            Analytics
           </Link>
         </Button>
         <Button variant="outline" asChild>
@@ -68,7 +68,7 @@ export function QuickActionsCard({ organizationId }: QuickActionsCardProps) {
           <DialogTrigger asChild>
             <Button variant="destructive">
               <Trash className="h-4 w-4 mr-2" />
-              Delete Organisation
+              Delete Org
             </Button>
           </DialogTrigger>
           <DialogContent>

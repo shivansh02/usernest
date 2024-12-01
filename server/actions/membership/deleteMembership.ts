@@ -17,7 +17,7 @@ export async function DeleteMembership(userId: string, organisationId: string) {
       },
     });
     if (membership?.user.id == membership?.organisation.creatorId) {
-      return { failure: "Cannot kick organisation owner" };
+      throw new Error("Cannot kick organisation owner");
     }
     await prisma.membership.delete({
       where: {

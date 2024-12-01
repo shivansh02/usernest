@@ -142,8 +142,8 @@ const UsersTable = ({ usersData, myRole }: UsersTableProps) => {
 
         return (
           <Button
-            disabled={user.id === session?.user.id}
-            variant="ghost"
+          disabled={user.id === session?.user.id || checkDisabled(user.role)}
+          variant="ghost"
             className="h-8 w-8 p-0"
             onClick={async () => {
               if (orgId) {
