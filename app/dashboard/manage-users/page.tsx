@@ -51,10 +51,9 @@ const UserActionPage = async () => {
     <div className="w-full flex-1">
       <header className="flex h-16 items-center gap-4 border-b px-6">
         <SidebarTrigger />
-        <h1 className="text-xl">Manage Users</h1>
+        <h1 className="text-xl">Manage Members</h1>
       </header>
       <div className="p-6">
-        <h1 className="my-2 text-xl text-gray-500">Manage users</h1>
         <UsersTable usersData={users} myRole={myRole!} />
       </div>
     </div>

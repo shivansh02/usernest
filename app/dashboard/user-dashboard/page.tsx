@@ -59,7 +59,7 @@ export default async function UserDashboard() {
       <Card className="mb-6">
         <CardHeader className="flex flex-row items-center gap-4">
           <Avatar className="h-20 w-20">
-            <AvatarFallback>
+            <AvatarFallback className="bg-stone-900 text-white">
               {orgData.orgDetails.name.slice(0, 2)}
             </AvatarFallback>
           </Avatar>

@@ -91,7 +91,7 @@ export default function CreateOrgForm() {
           type="submit"
           className={cn("w-full", isExecuting ? "animate-pulse" : "")}
         >
-          Join Organisation
+          Create Organisation
         </Button>
       </form>
     </Form>
