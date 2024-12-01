@@ -1,6 +1,6 @@
 "use server";
 import { LoginSchema } from "@/types/loginSchema";
-import { actionClient } from "@/lib/safe-action";
+import { actionClient } from "@/lib/safeAction";
 import { signIn } from "@/server/auth";
 import { AuthError } from "next-auth";
 import { checkOnboarding } from "@/server/actions/membership/checkOnboarding";

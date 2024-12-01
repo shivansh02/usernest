@@ -1,6 +1,6 @@
 "use server";
 import { ForgotPassSchema } from "@/types/forgotPassSchema";
-import { actionClient } from "@/lib/safe-action";
+import { actionClient } from "@/lib/safeAction";
 import { prisma } from "@/server/prisma";
 import bcrypt from "bcryptjs";
 import { generatePasswordResetToken, sendPasswordResetEmail } from "./tokens";

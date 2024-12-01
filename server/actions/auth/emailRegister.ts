@@ -1,6 +1,6 @@
 "use server";
 import { RegisterSchema } from "@/types/registerSchema";
-import { actionClient } from "@/lib/safe-action";
+import { actionClient } from "@/lib/safeAction";
 import { prisma } from "@/server/prisma";
 import bcrypt from "bcryptjs";
 import { generateVerificationToken, sendVerificationEmail } from "./tokens";

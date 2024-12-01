@@ -12,6 +12,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import NoPermission from "@/components/common/noPermission";
 import { auth } from "@/server/auth";
 import CountUpWrapper from "./_components/countUpWrapper";
+import PermissionProvider from "@/components/providers/permissionProvider";
 
 const cardData = [
   {
@@ -97,14 +98,10 @@ const cardData = [
 
 export default async function AnalyticsDashboard() {
   const session = await auth();
-  const orgId = session?.user.orgId;
   const perms = session?.user.perms!;
 
-  if (!perms.includes("VIEW_ANALYTICS")) {
-    return <NoPermission />;
-  }
-
   return (
+    <PermissionProvider permissions={["VIEW_ANALYTICS_DASHBOARD"]} userPermissions={perms}>
     <div className="flex flex-col min-h-screen w-full">
       <header className="bg-background border-b">
         <div className="flex space-x-4 container mx-auto px-4 py-4">
@@ -140,5 +137,6 @@ export default async function AnalyticsDashboard() {
         </div>
       </main>
     </div>
+    </PermissionProvider>
   );
 }

@@ -6,7 +6,7 @@ import { InviteCodeCard } from "./_components/inviteCodeCard";
 import { QuickActionsCard } from "./_components/quickActionsCard";
 import { RBACPoliciesCard } from "./_components/rbacPoliciesCard";
 import { auth } from "@/server/auth";
-import NoPermission from "@/components/common/noPermission";
+import PermissionProvider from "@/components/providers/permissionProvider";
 
 export default async function AdminDashboard() {
   const session = await auth();
@@ -15,9 +15,9 @@ export default async function AdminDashboard() {
 
   const perms = session?.user.perms!;
 
-  if (perms && !perms.includes("VIEW_ADMIN_DASHBOARD")) {
-    return <NoPermission />;
-  }
+  // if (perms && !perms.includes("VIEW_ADMIN_DASHBOARD")) {
+  //   return <NoPermission />;
+  // }
 
   if (!orgId) {
     return (
@@ -40,6 +40,7 @@ export default async function AdminDashboard() {
   const totalMembers = orgData.users + orgData.managers + orgData.admins;
 
   return (
+    <PermissionProvider permissions={["VIEW_ADMIN_DASHBOARD"]} userPermissions={perms}>
     <div className="container mx-auto p-6">
       <OrgHeader organization={orgData.orgDetails} />
 
@@ -73,5 +74,6 @@ export default async function AdminDashboard() {
         <QuickActionsCard organizationId={orgData.orgDetails.id} />
       </div>
     </div>
+    </PermissionProvider>
   );
 }

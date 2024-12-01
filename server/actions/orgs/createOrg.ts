@@ -1,6 +1,6 @@
 "use server";
 import { auth } from "@/server/auth";
-import { actionClient } from "@/lib/safe-action";
+import { actionClient } from "@/lib/safeAction";
 import { prisma } from "@/server/prisma";
 import { newOrgSchema } from "@/types/newOrgSchema";
 import { Role } from "@prisma/client";

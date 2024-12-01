@@ -1,6 +1,6 @@
 "use server";
 import { auth } from "@/server/auth";
-import { actionClient } from "@/lib/safe-action";
+import { actionClient } from "@/lib/safeAction";
 import { prisma } from "@/server/prisma";
 import { orgInvite } from "@/types/newOrgSchema";
 import { revalidatePath } from "next/cache";

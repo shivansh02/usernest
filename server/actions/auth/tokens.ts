@@ -1,6 +1,6 @@
 "use server";
 import { prisma } from "@/server/prisma";
-import getBaseUrl from "@/lib/base-url";
+import getBaseUrl from "@/lib/baseURL";
 import { Resend } from "resend";
 
 export const getVerificationToken = async (email: string) => {

@@ -4,6 +4,7 @@ import { prisma } from "@/server/prisma";
 import { auth } from "@/server/auth";
 import { getMyRole } from "@/server/actions/membership/getMyRole";
 import NoPermission from "@/components/common/noPermission";
+import PermissionProvider from "@/components/providers/permissionProvider";
 
 export type User = {
   id: string;
@@ -44,11 +45,9 @@ const UserActionPage = async () => {
 
   const perms = session?.user.perms!;
 
-  if (!perms.includes("MANAGE_USERS")) {
-    return <NoPermission />;
-  }
 
   return (
+    <PermissionProvider permissions={["MANAGE_USERS"]} userPermissions={perms}>
     <div className="w-full flex-1">
       <header className="flex h-16 items-center gap-4 border-b px-6">
         <SidebarTrigger />
@@ -59,6 +58,7 @@ const UserActionPage = async () => {
         <UsersTable usersData={users} myRole={myRole!} />
       </div>
     </div>
+    </PermissionProvider>
   );
 };
 
